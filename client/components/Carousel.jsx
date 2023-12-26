@@ -15,7 +15,7 @@ const Carousel = () => {
         <SliderBox images={slides}
         dotColor={COLORS.primary}
         inactiveDotColor={COLORS.secondary}
-        ImageComponentStyle={{borderRadius: 15 , width:"95%", marginTop: 15}}
+        ImageComponentStyle={{borderRadius: 15 , width:"95%", marginTop: 5}}
         autoplay
         circleLoop
         />
@@ -29,5 +29,6 @@ const styles = StyleSheet.create({
     carouselContainer:{
         flex:1,
         alignItems:"center",
+        marginTop:-8
     },
 });

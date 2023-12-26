@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { useFonts } from 'expo-font';
-// import * as SplashScreen from 'expo-splash-screen'
+import * as SplashScreen from 'expo-splash-screen'
 import { useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from './navigation/BottomTabNavigation';
+import ProductDetails from './screens/ProductDetails';
 
 
 const Stack = createNativeStackNavigator();
@@ -22,21 +23,22 @@ export default function App() {
     semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
   });
 
-  // const onLayoutRootView = useCallback(async() =>{
+  const onLayoutRootView = useCallback(async() =>{
 
-  //   if(fontsLoaded){
-  //     await SplashScreen.hideAsync();
-  //   }
-  // },[fontsLoaded]);
+    if(fontsLoaded){
+      await SplashScreen.hideAsync();
+    }
+  },[fontsLoaded]);
 
-  // if(!fontsLoaded){
-  //   return null;
-  // }
+  if(!fontsLoaded){
+    return null;
+  }
 
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Bottom Navigator" component={BottomTabNavigation} options={{ headerShown:false}}/>
+        <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

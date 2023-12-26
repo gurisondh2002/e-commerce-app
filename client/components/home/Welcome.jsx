@@ -44,15 +44,15 @@ const styles = StyleSheet.create({
     },
     textStyleA:{
         fontFamily:"bold",
-        fontSize:SIZES.xxLarge -8,
-        marginTop:0,
+        fontSize:SIZES.xxLarge -10,
+        marginTop:-3,
         color:COLORS.black,
         marginHorizontal:12
     },
     textStyleB:{
         fontFamily:"bold",
-        fontSize:SIZES.xxLarge -8,
-        marginTop:0,
+        fontSize:SIZES.xxLarge -10,
+        marginTop:-10,
         color:COLORS.primary,
         marginHorizontal:12
     },

@@ -5,11 +5,14 @@ import { Ionicons, Fontisto } from "@expo/vector-icons"
 import { SIZES, COLORS } from '../constants/theme'
 import Welcome from '../components/home/Welcome'
 import Carousel from '../components/Carousel'
+import Heading from '../components/home/Heading'
+import Products from '../components/products/Products'
 // import Carousel from '../components/home/carousel'
 
 const Home = () => {
   return (
     <SafeAreaView>
+      <ScrollView>
       <View style={styles.mainContainer}>
         <View style={styles.container}>
           <Ionicons name="location-outline" size={24} />
@@ -27,6 +30,9 @@ const Home = () => {
       <ScrollView>
         <Welcome />
         <Carousel/>
+        <Heading/>
+        <Products/>
+      </ScrollView>
       </ScrollView>
     </SafeAreaView>
   )
@@ -37,7 +43,7 @@ export default Home
 const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 22,
-    marginTop: 40
+    marginTop: 20
   },
   container: {
     flexDirection: "row",
