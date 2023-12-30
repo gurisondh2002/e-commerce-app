@@ -2,8 +2,12 @@ const express = require("express")
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+// const cors = require('cors')
 const productRouter = require("./routes/ProductRoute");
 const port = 3000;
+
+
+// app.use(cors())
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URL).then(() =>{

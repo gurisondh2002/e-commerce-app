@@ -2,8 +2,12 @@ import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import React, { useState } from 'react'
 import { Ionicons, SimpleLineIcons , MaterialCommunityIcons , Fontisto} from "@expo/vector-icons"
 import { COLORS, SIZES } from '../constants/theme'
+import { useRoute } from '@react-navigation/native'
 
 const ProductDetails = ({ navigation }) => {
+
+  const route = useRoute();
+  const {item} = route.params;
 
   const [count, setCount] = useState(1);
 
@@ -31,13 +35,13 @@ const ProductDetails = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <Image source={{ uri: "https://images.pexels.com/photos/1571463/pexels-photo-1571463.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" }} style={styles.image} />
+      <Image source={{ uri : item.imageUrl }} style={styles.image} />
 
       <View style={styles.detials}>
         <View style={styles.titleStyle}>
-          <Text style={styles.title}>Product</Text>
+          <Text style={styles.title}>{item.title}</Text>
           <View style={styles.priceWrapper}>
-            <Text style={styles.price}>$ 660.88</Text>
+            <Text style={styles.price}>${item.price}</Text>
           </View>
         </View>
 
@@ -69,7 +73,7 @@ const ProductDetails = ({ navigation }) => {
         <View style={styles.descriptionStyle}>
           <Text style={styles.description}>Description</Text>
           <Text style = {styles.descriptionText}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+            {item.description}
           </Text>
         </View>
 
@@ -77,7 +81,7 @@ const ProductDetails = ({ navigation }) => {
           <View style={styles.location}>
             <View style={{flexDirection:"row"}}>
             <Ionicons name="location-outline" size={20}/>
-            <Text>  Punjab</Text>
+            <Text>{item.product_location}</Text>
             </View>
 
             <View style={{flexDirection:"row"}}>
