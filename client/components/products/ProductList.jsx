@@ -4,7 +4,7 @@ import { COLORS, SIZES } from '../../constants/theme';
 import ProductCard from './ProductCard';
 import axios from 'axios';
 
-const ProductList = () => {
+const ProductList = ({ onCountChange, totalCartCount }) => {
     const [data, setData] = useState(null);
     const [isLoading , setIsLoading] = useState(false)
 
@@ -12,7 +12,7 @@ const ProductList = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://192.168.1.10:3000/api/products/');
+        const response = await axios.get('http://192.168.5.60:3000/api/products/');
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -25,6 +25,10 @@ const ProductList = () => {
       fetchData();
     }, []);
 
+    const handleCountChange = (count) => {
+      onCountChange(count);
+    }
+
     if(isLoading){
         return(
             <View style={styles.loadingContainer}>
@@ -36,7 +40,7 @@ const ProductList = () => {
     <View style={styles.mainContainer}>
         <FlatList data={data} numColumns={2} 
          keyExtractor={(item) => item._id}
-         renderItem={({item}) => <ProductCard item={item}/>}
+         renderItem={({item}) => <ProductCard item={item} onCountChange={(count) => handleCountChange(count)}/>}
         contentContainerStyle={styles.mainContainer}
         ItemSeparatorComponent={() => <View style={styles.separator} />}/>
     </View>

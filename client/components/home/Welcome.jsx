@@ -27,9 +27,9 @@ const Welcome = () => {
                     <TextInput value='' style={styles.searchInput} onPressIn={searchHandler} placeholder="What are you looking for"/>
                 </View>
                 <View>
-                    <TouchableOpacity style={styles.searchBtn}>
+                    {/* <TouchableOpacity style={styles.searchBtn}>
                         <Ionicons name="camera-outline" size={SIZES.xLarge} color={COLORS.offwhite}/>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
         </View>

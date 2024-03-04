@@ -1,11 +1,24 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { COLORS, SIZES } from '../constants/theme'
 import { Ionicons } from "@expo/vector-icons"
 import ProductList from '../components/products/ProductList'
 
 const NewRivals = ({ navigation }) => {
+
+    const [cartCount, setCartCount] = useState(0);
+  const [totalCartCount, setTotalCartCount] = useState(0);
+  const [cartItems, setCartItems] = useState(new Set());
+
+    const handleCartCountChange = (count, itemId) => {
+        if (cartItems.has(itemId)) {
+          setTotalCartCount(totalCartCount + 1);
+        } else {
+          setCartItems(new Set(cartItems).add(itemId));
+          setTotalCartCount(totalCartCount + count);
+        }
+      }
     return (
         <SafeAreaView style={styles.mainContainer}>
             <View style={styles.container}>
@@ -15,7 +28,7 @@ const NewRivals = ({ navigation }) => {
                     </TouchableOpacity>
                     <Text style={styles.heading}>Products</Text>
                 </View>
-                <ProductList />
+                <ProductList onCountChange={handleCartCountChange} totalCartCount={totalCartCount}/>
             </View>
         </SafeAreaView>
     )

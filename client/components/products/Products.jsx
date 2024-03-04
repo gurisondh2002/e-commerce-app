@@ -5,7 +5,7 @@ import { SIZES ,COLORS} from '../../constants/theme';
 import axios from 'axios';
 // import useFetch from '../../hook/useFetch';
 
-const Products = () => {
+const Products = ({ onCountChange, totalCartCount }) => {
     // const {data, isLoading, error} = useFetch();
     // const products = [1,2 ,3,4];
 
@@ -14,7 +14,7 @@ const Products = () => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://192.168.1.10:3000/api/products/');
+        const response = await axios.get('http://192.168.5.60:3000/api/products/');
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
@@ -27,6 +27,10 @@ const Products = () => {
       fetchData();
     }, []);
 
+    const handleCountChange = (count) => {
+      onCountChange(count);
+    }
+
   return (
 
     <View style={{marginTop:SIZES.medium, marginHorizontal:12}}>
@@ -35,7 +39,7 @@ const Products = () => {
       ):(
         <FlatList data={data} 
         keyExtractor={(item) => item._id}
-        renderItem={({item}) => <ProductCard item={item}/>}
+        renderItem={({item}) => <ProductCard item={item} onCountChange={(count) => handleCountChange(count)}/>}
         horizontal
         contentContainerStyle={{ columnGap: SIZES.medium }}/>
       )}

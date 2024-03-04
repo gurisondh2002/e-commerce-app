@@ -14,6 +14,10 @@ const UserSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    // image:{
+    //     data: { type: Buffer, default: null }, 
+    //     contentType: { type: String, default: null },
+    // },
     location:{
         type:String,
         default:"Punjab",

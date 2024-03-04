@@ -8,6 +8,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from './navigation/BottomTabNavigation';
 import ProductDetails from './screens/ProductDetails';
 import NewRivals from './screens/NewRivals';
+import LoginPage from './screens/LoginPage';
+import Favourites from './screens/Favourites';
+import Orders from './screens/Orders';
+import Cart from './screens/Cart';
+import RegisterPage from './screens/RegisterPage';
+import { UserProvider } from './components/auth/userContext';
+import updateProfile from './screens/updateProfile';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,13 +43,21 @@ export default function App() {
   }
 
   return (
+    <UserProvider>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Bottom Navigator" component={BottomTabNavigation} options={{ headerShown:false}}/>
         <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown:false}}/>
         <Stack.Screen name="ProductList" component={NewRivals} options={{ headerShown:false}}/>
+        <Stack.Screen name="Login" component={LoginPage} options={{ headerShown:false}}/>
+        <Stack.Screen name="SignUp" component={RegisterPage} options={{ headerShown:false}}/>  
+        <Stack.Screen name="Favourites" component={Favourites} options={{ headerShown:false}}/>
+        <Stack.Screen name="Orders" component={Orders} options={{ headerShown:false}}/>
+        <Stack.Screen name="Cart" component={Cart} options={{ headerShown:false}}/>      
+        <Stack.Screen name="UpdateUser" component={updateProfile} options={{ headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </UserProvider>
   );
 }
 

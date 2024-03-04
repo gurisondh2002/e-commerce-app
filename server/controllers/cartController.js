@@ -20,7 +20,7 @@ module.exports = {
                 }
 
                 await cart.save();
-                res.status(200).json({message : "Produc added to cart..."});
+                res.status(200).json({message : "Product added to existing cart..."});
             }
             else{
                 const newCart = new Cart({
