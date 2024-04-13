@@ -27,9 +27,6 @@ const Products = ({ onCountChange, totalCartCount }) => {
       fetchData();
     }, []);
 
-    const handleCountChange = (count) => {
-      onCountChange(count);
-    }
 
   return (
 
@@ -39,7 +36,7 @@ const Products = ({ onCountChange, totalCartCount }) => {
       ):(
         <FlatList data={data} 
         keyExtractor={(item) => item._id}
-        renderItem={({item}) => <ProductCard item={item} onCountChange={(count) => handleCountChange(count)}/>}
+        renderItem={({item}) => <ProductCard item={item}/>}
         horizontal
         contentContainerStyle={{ columnGap: SIZES.medium }}/>
       )}

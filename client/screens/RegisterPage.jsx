@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, Alert } from 'react-native';
 import Btn from '../components/Btn';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { COLORS, SIZES } from '../constants/theme';
 import * as ImagePicker from 'expo-image-picker';
+import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 // import AnimatedLoader from 'react-native-animated-loader';
 import LottieView from 'lottie-react-native';
+import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Feather, FontAwesome, Entypo } from "@expo/vector-icons"
+import { IconButton } from 'react-native-paper';
+
 
 const RegisterPage = () => {
   const navigation = useNavigation();
@@ -16,9 +20,10 @@ const RegisterPage = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [location, setLocation] = useState('');
-  const [image, setImage] = useState(null);
+  const [picture, setPicture] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  
+  const [modal, setModal] = useState(false)
+
 
   useEffect(() => {
     if (loading) {
@@ -29,20 +34,26 @@ const RegisterPage = () => {
   const handleRegister = async () => {
     if (!validateForm()) return;
     try {
-      const formData = new FormData();
-      formData.append('username', username);
-      formData.append('email', email);
-      formData.append('password', password);
-      formData.append('location', location);
-      if (image) {
-        formData.append('image', {
-          uri: image.uri,
-          type: 'image/jpeg',
-          name: 'user.jpg'
+      // const formData = new FormData();
+      // formData.append('username', username);
+      // formData.append('email', email);
+      // formData.append('password', password);
+      // formData.append('location', location);
+      // if (image) {
+      //   formData.append('image', {
+      //     uri: image.uri,
+      //     type: 'image/jpeg',
+      //     name: 'user.jpg'
+      //   });
+      // }
+      const response = await axios.post('http://192.168.5.60:3000/api/register', { username, email, password, location, picture },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          },
         });
-      }
-      const response = await axios.post('http://192.168.5.60:3000/api/register', { username, email, password, location });
       if (response.status === 201) {
+        Alert.alert(` is saved successfuly`)
         navigation.navigate('Login');
         console.log(response.data);
       } else {
@@ -73,26 +84,70 @@ const RegisterPage = () => {
     return isValid;
   };
 
-  const pickImage = async () => {
-    try {
-      const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (permissionResult.granted === false) {
-        alert("Permission to access camera roll is required!");
-        return;
-      }
-      const result = await ImagePicker.launchImageLibraryAsync({
+  const pickFromGallery = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA_ROLL)
+    if (granted) {
+      let data = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        setImage(result);
+        aspect: [1, 1],
+        quality: 0.5
+      })
+      if (!data.cancelled) {
+        let newfile = {
+          uri: data.uri,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`
+
+        }
+        handleUpload(newfile)
       }
-    } catch (error) {
-      console.error('Image picker error:', error);
+    } else {
+      Alert.alert("you need to give up permission to work")
     }
-  };
+  }
+  const pickFromCamera = async () => {
+    const { granted } = await Permissions.askAsync(Permissions.CAMERA)
+    if (granted) {
+      let data = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.5
+      })
+      if (!data.canceled) {
+        let newfile = {
+          uri: data.uri,
+          type: `test/${data.uri.split(".")[1]}`,
+          name: `test.${data.uri.split(".")[1]}`
+
+        }
+        handleUpload(newfile)
+      }
+    } else {
+      Alert.alert("you need to give up permission to work")
+    }
+  }
+
+
+  const handleUpload = (image) => {
+    const data = new FormData()
+    data.append('file', image)
+    data.append('upload_preset', 'furnitureApp')
+    data.append("cloud_name", "dhg6k869v")
+
+    fetch("https://api.cloudinary.com/v1_1/dhg6k869v/image/upload", {
+      method: "post",
+      body: data
+    }).then(res => res.json()).
+      then(data => {
+        setPicture(data.url)
+        setModal(false)
+      }).catch(err => {
+        Alert.alert("error while uploading")
+      })
+  }
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -132,10 +187,14 @@ const RegisterPage = () => {
               placeholder='Enter location'
               onChangeText={setLocation}
             />
-            {/* <TouchableOpacity style={styles.inputText} onPress={pickImage}>
-              <Text style={{ color: COLORS.gray }}>Select Profile Image</Text>
-            </TouchableOpacity> */}
-            {image && <Image source={{ uri: image.uri }} style={{ width: 100, height: 100, marginBottom: 10 }} />}
+            <Btn
+              style={styles.inputStyle}
+              icon={picture == "" ? "upload" : "check"}
+              mode="contained"
+              title="Upload Image"
+              onPress={() => setModal(true)}>
+
+            </Btn>
             <Btn title={"S I G N  U P"} onPress={() => setLoading(true)} />
             <TouchableOpacity style={styles.registerButton} onPress={handleLogin}>
               <Text style={styles.registerStyle}>Login</Text>
@@ -152,16 +211,33 @@ const RegisterPage = () => {
       animationData={require("../assets/loading.json")}
       speed={1}>
     </AnimatedLoader> */}
-    {/* <LottieView
+          {/* <LottieView
   source={require('../assets/Animation.json')}
   autoPlay
   loop
 /> */}
- <View style={styles.loaderBackground}>
-    <ActivityIndicator size="large" color={COLORS.primary} />
-  </View>
+          <View style={styles.loaderBackground}>
+            <ActivityIndicator size="large" color={COLORS.primary} />
+          </View>
         </View>
       )}
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modal}
+        onRequestClose={() => {
+          setModal(false)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <FontAwesome name="photo" size={60} color="grey" onPress={() => pickFromGallery()} style={styles.icon} />
+            <AntDesign name="camera" size={60} color="grey" onPress={() => pickFromCamera()} style={styles.icon} />
+            <Entypo name="cross" size={24} color="black" onPress={() => setModal(false)} style={styles.closeIcon} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -223,5 +299,34 @@ const styles = StyleSheet.create({
   lottie: {
     width: 100,
     height: 100,
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.7)", // White background with transparency
+  },
+  modalView: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    elevation: 5,
+  },
+  modalButtonView: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    marginBottom: 20,
+  },
+  icon: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+  },
+  closeIcon: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+  },
 });

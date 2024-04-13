@@ -6,45 +6,51 @@ import Btn from '../components/Btn'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
-// import { AsyncStorage } from "react-native"
-import { AsyncStorage } from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '../components/auth/userContext'
 
 const LoginPage = () => {
-
-  const { setUserData } = useUser();
-
-
+  const { userData, setUserData } = useUser();
   const navigation = useNavigation();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async () => {
     if (!validateForm()) return;
-
+  
     try {
       const response = await axios.post('http://192.168.5.60:3000/api/login', { email, password });
       if (response.status === 200) {
-        const { _id , username, email} = response.data; 
-        setUserData({ userId: _id , username: username, email: email}); 
-        console.log('User ID:', _id);
-        console.log('User Name:', username);
-        console.log('User Email:', email);
-        localStorage.setItem("ID",  response.data._id)
-        console.log(localStorage.getItem("ID"));
+        
+        let promise = new Promise(async (res, rej) => {
+            await AsyncStorage.setItem('userEmail', response.data.email);
+            await AsyncStorage.setItem('userName', response.data.username);
+            await AsyncStorage.setItem('userId', response.data._id);
+            if (response.data.picture) {
+                await AsyncStorage.setItem('userPic', response.data.picture);
+            }
+            res()
+        })
+        await Promise.all(promise).then(async() =>{
+          // console.log("User Email ==> ", await AsyncStorage.getItem('userEmail'))
+            navigation.navigate('Profile')
+        }
+        ).catch(err => {
+            setErrorMessage(err)
+        })
 
-        navigation.navigate('Home');
-        console.log(response.data._id)
       } else {
-        setErrorMessage("Login failed");
+        setErrorMessage("Login failjed");
+        // await AsyncStorage.setItem('userLogin', 'false');
       }
     } catch (error) {
       console.error('Login failed:', error);
       setErrorMessage(error.response.data.message || 'Invalid email or password');
+      // await AsyncStorage.setItem('userLogin', 'false');
     }
   };
+  
 
 
   const validateForm = () => {
@@ -76,7 +82,6 @@ const LoginPage = () => {
           <Image source={require('../assets/images/login.png')} style={styles.cover} />
           <Text style={styles.title}>Unlimited Luxurious Furniture</Text>
           <View>
-
             {errorMessage && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
             <Text style={styles.label}>Email</Text>
             <TextInput
@@ -100,7 +105,6 @@ const LoginPage = () => {
               <Text style={styles.registerStyle}>Register</Text>
             </TouchableOpacity>
           </View>
-          {/* </Formik> */}
         </View>
       </SafeAreaView>
     </ScrollView>
@@ -134,7 +138,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: COLORS.lightWhite,
     color: "black",
-    // marginHorizontal:12
     paddingHorizontal: 15
   },
   label: {

@@ -5,29 +5,51 @@ import ProductCard from '../components/products/ProductCard';
 import axios from 'axios';
 import { Ionicons } from "@expo/vector-icons"
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Cart = ({ onCountChange, totalCartCount }) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false)
+  const [id, setId] = useState('');
 
   const navigation = useNavigation()
 
-
-  const fetchData = async () => {
+  const fetchStoredUserData = async () => {
     try {
-      setIsLoading(true);
-      const response = await axios.get('http://192.168.5.60:3000/api/products/');
-      setData(response.data);
-      setIsLoading(false);
+      const storedId = await AsyncStorage.getItem('userId');
+      // console.log(userId)
+      setId(storedId)
+      console.log("ud", id);
+      // console.log(cartCount)
     } catch (error) {
-      console.error(error);
+      console.error('Error fetching stored user data:', error);
     }
   };
 
   useEffect(() => {
-
-    fetchData();
+    fetchStoredUserData();
+    handleViewCart();
   }, []);
+
+
+  const handleViewCart = async () => {
+    try {
+      console.log(id);
+      const res = await axios.get(`http://192.168.5.60:3000/api/carts/find/${id}`);
+      if (res.status === 200) {
+        const cartData = res.data;
+        const productsArray = cartData.message[0].products;
+        console.log(productsArray)
+        setData(productsArray);
+        console.log('Products fetched successfully');
+      } else {
+        console.error(`Request failed with status ${res.status}`);
+      }
+    } catch (error) {
+      console.error('Error fchingjh products of cart:', error);
+    }
+  };
+  
 
   const handleCountChange = (count) => {
     onCountChange(count);
@@ -53,7 +75,7 @@ const Cart = ({ onCountChange, totalCartCount }) => {
         <View style={styles.mapContainer}>
           <FlatList data={data} numColumns={2}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <ProductCard item={item} onCountChange={(count) => handleCountChange(count)} />}
+            renderItem={({ item }) => <ProductCard item={item} />}
             contentContainerStyle={styles.mainContainer}
             ItemSeparatorComponent={() => <View style={styles.separator} />} />
         </View>

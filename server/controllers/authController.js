@@ -27,17 +27,12 @@ module.exports = {
           // Encrypt the password
           const encryptedPassword = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET).toString();
   
-          // Save image to file system
-          // const imageFileName = `${Date.now()}-${req.body.email}.jpg`; // Use email as part of the filename to ensure uniqueness
-          // const imagePath = path.join(__dirname, '../uploads/', imageFileName);
-          // const imageData = req.body.image.replace(/^data:image\/\w+;base64,/, ''); // Remove the data URI prefix
-          // fs.writeFileSync(imagePath, imageData, { encoding: 'base64' });
-  
           const newUser = new User({
               username: req.body.username,
               email: req.body.email,
               password: encryptedPassword,
               location: req.body.location,
+              picture:req.body.picture,
               // image: imagePath // Store the file path instead of the image data
           });
   

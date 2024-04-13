@@ -11,22 +11,63 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native'
 import { useUser } from '../components/auth/userContext'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
 
   const { userData } = useUser();
 
   const [locationName, setLocationName] = useState('');
+  const [userId, setUserId] = useState(false);
+  const [id, setId] = useState('');
   const [errorMsg, setErrorMsg] = useState(null);
-  const [cartCount, setCartCount] = useState(0);
-  const [totalCartCount, setTotalCartCount] = useState(0);
-  const [cartItems, setCartItems] = useState(new Set());
-
-  const navigation = useNavigation();
-  const userId = userData.userId;
+  const [cartCount, setCartCount] = useState();
 
   useEffect(() => {
-    console.log('User ID Homjjje page:', userId);
+    fetchStoredUserData();
+    if (userId === 'true') {
+      console.log(AsyncStorage.getItem('userEmail'))
+      getCountCart();
+      // console.log(cartCount); 
+    } else {
+      setCartCount(0);
+    }
+  }, [userId]);
+
+  const fetchStoredUserData = async () => {
+    try {
+      const storedUserId = await AsyncStorage.getItem('userLogin');
+      const storedId = await AsyncStorage.getItem('userId');
+      setUserId(storedUserId); 
+      // console.log(userId)
+      setId(storedId)
+      console.log("usersdjfId", id);
+      // console.log(cartCount)
+    } catch (error) {
+      console.error('Error fetching stored user data:', error);
+    }
+  };
+  
+  const getCountCart = async () => {
+    try {
+      // console.log("text",id)
+      const resp = await axios.get(`http://192.168.5.60:3000/api/carts/getCart/${id}`);
+      if (resp.status === 200) {
+        console.log(resp.data.totalProductQuantity)
+        setCartCount(resp.data.totalProductQuantity);
+        
+      } else {
+        console.error(`Request failcedfdd mwith statcus ${resp.status}`);
+      }
+    } catch (error) {
+      console.error('Error fetchihng cart count:', error);
+    }
+  };
+
+  const navigation = useNavigation();
+  const pic = userData.picture;
+
+  useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
@@ -49,17 +90,9 @@ const Home = () => {
       }
     } catch (error) {
       console.error('Error fetching location:', error);
-      setErrorMsg('Error fetching location');
+      setErrorMsg('Error fetchinng location');
     }
   };
-  const handleCartCountChange = (count, itemId) => {
-    if (cartItems.has(itemId)) {
-      setTotalCartCount(totalCartCount + 1);
-    } else {
-      setCartItems(new Set(cartItems).add(itemId));
-      setTotalCartCount(totalCartCount + count);
-    }
-  }
 
   const handleCartClick = () =>{
     navigation.navigate("Cart")
@@ -74,7 +107,7 @@ const Home = () => {
           <Text style={styles.textStyle}>{locationName || 'Fetching location...'}</Text>
           <View style={{ alignItems: "flex-end" }}>
             <View style={styles.cartCount}>
-              <Text style={styles.cartNumber}>{totalCartCount}</Text>
+              <Text style={styles.cartNumber}>{cartCount}</Text>
             </View>
             <TouchableOpacity>
               <Fontisto name="shopping-bag" size={24} onPress={handleCartClick}/>
@@ -86,7 +119,7 @@ const Home = () => {
         <Welcome />
         <Carousel/>
         <Heading/>
-        <Products  onCountChange={handleCartCountChange} totalCartCount={totalCartCount}/>
+        <Products />
       </ScrollView>
       </ScrollView>
     </SafeAreaView>
