@@ -8,7 +8,6 @@ import { COLORS, SIZES } from '../constants/theme';
 import { useIsFocused } from '@react-navigation/native';
 
 const Profile = () => {
-  // const { userData, setUserData } = useUser();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
   const [name, setName] = useState('')
@@ -16,22 +15,12 @@ const Profile = () => {
   const [userrId, setUserrId] = useState('')
   const [userrPic, setUserrPic] = useState('')
 
-  // useFocusEffect(() => {
-  //   console.log("h")
-  //   const string =  fetchStoredUserData();
-  //   console.log("string", string)
-  // });
-
   const isFocused = useIsFocused();
- useEffect(() => {
-        if (isFocused) {
-          // console.log("h")
-        fetchStoredUserData();
-          // console.log("string", string)
-        }
-    }, [isFocused]);
-
-
+  useEffect(() => {
+    if (isFocused) {
+      fetchStoredUserData();
+    }
+  }, [isFocused]);
 
   const fetchStoredUserData = async () => {
     try {
@@ -39,17 +28,14 @@ const Profile = () => {
       setIsLoading(true);
       let mypromise = new Promise(async (resolve, reject) => {
         const storedUserLogin = await AsyncStorage.getItem('userId');
-        if(storedUserLogin){
-          console.log("wsdehhfgn")
+        if (storedUserLogin) {
           resolve(storedUserLogin)
         }
-        else{
-          console.log("reject")
+        else {
           reject();
         }
       })
       await mypromise.then(async (sul) => {
-        console.log("werfg", sul)
         if (sul) {
           let promise = new Promise(async (res, rej) => {
             setName(await AsyncStorage.getItem('userName'))
@@ -57,20 +43,23 @@ const Profile = () => {
             setUserrId(await AsyncStorage.getItem('userEmail'))
             setUserrPic(await AsyncStorage.getItem('userPic'))
             res()
-            console.log("fgjfhj")
           })
-          await Promise.all(promise).then(() =>{
-            console.log("werfgh")
-          }).catch((err) =>{
-            console.log("qwertwertergh nerr")
+          await Promise.all(promise).then(() => {
+
+          }).catch((err) => {
+
           })
-          // setUserData({ username: storedUserName, userId: storedUserId, email: storedUserEmail, picture: storedUserPic });
+        }
+        else {
+          setUserrId('')
+          setName('')
         }
       })
-      return "retyurn"
+      return "return"
     } catch (error) {
-      console.error('Error fetching stored user data:', error);
-      return "catch"
+      setUserrId('')
+      setName('')
+      setUserrPic('')
     } finally {
       setIsLoading(false);
       return "final"
@@ -91,8 +80,10 @@ const Profile = () => {
             await AsyncStorage.removeItem('userName');
             await AsyncStorage.removeItem('userEmail');
             await AsyncStorage.removeItem('userPic');
+            setUserrId('')
+            setName('')
+            setUserrPic('')
             navigation.navigate("Home");
-            console.log("Continue Pressed");
           }
         },
         {
@@ -101,8 +92,10 @@ const Profile = () => {
             AsyncStorage.removeItem('userName');
             AsyncStorage.removeItem('userEmail');
             AsyncStorage.removeItem('userPic');
+            setUserrId('')
+            setName('')
+            setUserrPic('')
             navigation.navigate("Home");
-            console.log("Ok Pressed");
           }
         }
       ],
@@ -119,11 +112,17 @@ const Profile = () => {
           text: "Cancel", onPress: () => console.log("Cancel Pressed cache")
         },
         {
-          text: "Continue",
-          onPress: () => {
-            // Clear cache logic here
+          text: "Continue", onPress: async () => {
+            await AsyncStorage.removeItem('userId');
+            await AsyncStorage.removeItem('userName');
+            await AsyncStorage.removeItem('userEmail');
+            await AsyncStorage.removeItem('userPic');
+            setUserrId('')
+            setName('')
+            setUserrPic('')
+            navigation.navigate("Home");
           }
-        }
+        },
       ],
       { cancelable: false }
     );
@@ -142,7 +141,7 @@ const Profile = () => {
           onPress: async () => {
             try {
               const userId = await AsyncStorage.getItem('userId');
-              await axios.delete(`http://192.168.5.60:3000/api/users/${userId}`);
+              await axios.delete(`http://192.168.29.2:3000/api/users/${userId}`);
               await AsyncStorage.removeItem('userId');
               await AsyncStorage.removeItem('userName');
               await AsyncStorage.removeItem('userEmail');

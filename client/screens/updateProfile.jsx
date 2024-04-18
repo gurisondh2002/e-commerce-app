@@ -6,7 +6,7 @@ import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Feather } from "@ex
 import { useUser } from '../components/auth/userContext'
 import axios from 'axios'
 
-export default function updateProfile() {
+export default function UpdateProfile() {
 
     const navigation = useNavigation();
     const { userData, setUserData } = useUser();
@@ -86,7 +86,7 @@ export default function updateProfile() {
                     text: "Continue",
                     onPress: async () => {
                         try {
-                            await axios.delete(`http://192.168.5.60:3000/api/users/${userData.userId}`);
+                            await axios.delete(`http://192.168.5.60:3020/api/users/${userData.userId}`);
                             setUserData({ userId: null, username: null, email: null });
                             console.log("Account deleted successfully.");
                         } catch (error) {

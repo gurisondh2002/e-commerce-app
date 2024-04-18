@@ -8,7 +8,7 @@ const authRouter = require("./routes/auth")
 const userRouter = require("./routes/user")
 const cartRouter = require("./routes/cart")
 const orderRouter = require("./routes/order")
-const port = 3000;
+const port = 3020;
 
 
 // app.use(cors())

@@ -18,13 +18,10 @@ module.exports = {
   
   createUser : async (req, res) => {
       try {
-          // Check if user already exists
           const existingUser = await User.findOne({ email: req.body.email });
           if (existingUser) {
               return res.status(400).json({ message: 'User already exists' });
           }
-  
-          // Encrypt the password
           const encryptedPassword = CryptoJS.AES.encrypt(req.body.password, process.env.SECRET).toString();
   
           const newUser = new User({

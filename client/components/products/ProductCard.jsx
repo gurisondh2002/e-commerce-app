@@ -2,41 +2,40 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { COLORS, SIZES } from '../../constants/theme'
 import { Ionicons } from "@expo/vector-icons"
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useUser } from '../auth/userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
 const ProductCard = ({ item}) => {
 
-    const { userData } = useUser();
-
     const [isLoading, setIsLoading] = useState(true);
-    const [uid, setUid] = useState('');
+    const [id, setId] = useState('');
   
+    const isFocused = useIsFocused();
     useEffect(() => {
-      const fetchStoredUserData = async () => {
-        try {
-          setIsLoading(true)
-          const storedUserLogin = await AsyncStorage.getItem('userLogin');
-          if (storedUserLogin === 'true') {
-            const storedUserId= await AsyncStorage.getItem('userId');
-            setUid(storedUserId);
-          }
-          setIsLoading(false); 
-        } catch (error) {
-          console.error('Error fetching stored user data:', error);
-          setIsLoading(false);
-        }
-      };
+      if (isFocused) {
+        fetchStoredUserData();
+      }
+    }, [isFocused]);
   
-      fetchStoredUserData();
-    }, []);
-
-    const userId = userData.userId;
+    const fetchStoredUserData = async () => {
+      try {
+        const storedId = await AsyncStorage.getItem('userId');
+        console.log("Stored Id ===> ", storedId)
+        if (storedId) {
+          console.log("Was in setId")
+          setId(storedId)
+          return storedId
+        } else {
+          setId('')
+        }
+      } catch (error) {
+        console.error('Error fetching stored user data:', error);
+      }
+    };
 
     const navigation = useNavigation();
-    const [count, setCount] = useState(0)
 
     const productHandler = () => {
         navigation.navigate("ProductDetails", { item })
@@ -44,12 +43,9 @@ const ProductCard = ({ item}) => {
 
     const handleAddItemToCart = async (prodId) => {
         try {
-            const res = await axios.post('http://192.168.5.60:3000/api/carts/', {
-                userId: uid,
-                productId: prodId,
-                quantity: count,
+            const res = await axios.post(`http://192.168.29.2:3020/api/carts/addToCart/${id}`, {
+                productInCart: prodId
             });
-            setCount(count + 1);
             console.log('Item added to cart successfully');
         } catch (error) {
             console.error('Error adding item to cart:', error);

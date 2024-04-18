@@ -5,17 +5,15 @@ import {Feather, Ionicons} from '@expo/vector-icons'
 import { COLORS, SIZES } from '../constants/theme'
 import axios from 'axios'
 import SearchedProducts from '../components/products/SearchedProducts'
-// import { useNavigation } from '@react-navigation/native'
 
 const Search = () => {
 
     const [searchKey, setSearchKey] = useState('');
     const[searchResults, setSearchResults] = useState([]);
-    // console.log(searchKey)
 
     const handleSearch = async() =>{
         try{
-            const response = await axios.get(`http://192.168.5.60:3000/api/products/search/${searchKey}`);
+            const response = await axios.get(`http://192.168.29.2:3020/api/products/search/${searchKey}`);
             // console.log(response.data);
             setSearchResults(response.data);
             setSearchKey('');
@@ -29,11 +27,6 @@ const Search = () => {
         setSearchResults('')
     }
 
-//     const navigation = useNavigation();
-
-//   const searchHandler = () =>{ 
-//     navigation.navigate("Search")
-// }
   return (
     <SafeAreaView>
       <View style={styles.searchContainer}>

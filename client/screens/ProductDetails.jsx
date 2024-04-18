@@ -1,26 +1,51 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons, SimpleLineIcons , MaterialCommunityIcons , Fontisto} from "@expo/vector-icons"
 import { COLORS, SIZES } from '../constants/theme'
-import { useRoute } from '@react-navigation/native'
+import { useIsFocused, useRoute } from '@react-navigation/native'
+import axios from 'axios'
 
 const ProductDetails = ({ navigation }) => {
 
   const route = useRoute();
   const {item} = route.params;
 
-  const [count, setCount] = useState(1);
-
-
-  const increment = () => {
-    setCount(count + 1);
-  }
-
-  const decrement = () => {
-    if (count > 1) {
-      setCount(count - 1);
+  const [id, setId] = useState('');
+  
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    if (isFocused) {
+      fetchStoredUserData();
     }
-  }
+  }, [isFocused]);
+
+  const fetchStoredUserData = async () => {
+    try {
+      const storedId = await AsyncStorage.getItem('userId');
+      console.log("Stored Id ===> ", storedId)
+      if (storedId) {
+        console.log("Was in setId")
+        setId(storedId)
+        return storedId
+      } else {
+        setId('')
+      }
+    } catch (error) {
+      console.error('Error fetching stored user data:', error);
+    }
+  };
+
+
+  const handleAddItemToCart = async (prodId) => {
+    try {
+        const res = await axios.post(`http://192.168.29.2:3020/api/carts/addToCart/${id}`, {
+            productInCart: prodId
+        });
+        console.log('Item added to cart successfully');
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+    }
+};
 
   return (
     <ScrollView>
@@ -52,12 +77,11 @@ const ProductDetails = ({ navigation }) => {
                 name='star'
                 size={24}
                 color="gold" />
-              // <Ionicons name="location-outline" size={24} />
             ))}
             <Text style={styles.ratingText}>(4.9)</Text>
           </View>
 
-          <View style={styles.rating}>
+          {/* <View style={styles.rating}>
             <TouchableOpacity onPress={increment}>
               <SimpleLineIcons name="plus" size={25} />
             </TouchableOpacity>
@@ -67,7 +91,7 @@ const ProductDetails = ({ navigation }) => {
             <TouchableOpacity onPress={decrement}>
               <SimpleLineIcons name="minus" size={25} />
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
 
         <View style={styles.descriptionStyle}>
@@ -91,12 +115,12 @@ const ProductDetails = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={styles.cartStyle}>
-          <TouchableOpacity onPress ={() =>{}} style={styles.cartBtn}>
+        <View style={styles.cartStyle} >
+          <TouchableOpacity onPress={() => handleAddItemToCart(item._id)} style={styles.cartBtn}>
             <Text style={styles.cartTitle}>BUY NOW</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress ={() =>{}} style={styles.addCart}>
+          <TouchableOpacity onPress={() => handleAddItemToCart(item._id)} style={styles.addCart}>
             <Fontisto name="shopping-bag" size={22} color={COLORS.lightWhite}/>
           </TouchableOpacity>
         </View>

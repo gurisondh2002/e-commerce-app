@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ActivityIndicator, Button, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, Alert } from 'react-native';
+import { ActivityIndicator, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Modal, Alert } from 'react-native';
 import Btn from '../components/Btn';
 import CustomButton from '../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
@@ -7,11 +7,7 @@ import { COLORS, SIZES } from '../constants/theme';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import axios from 'axios';
-// import AnimatedLoader from 'react-native-animated-loader';
-import LottieView from 'lottie-react-native';
-import { AntDesign, MaterialCommunityIcons, SimpleLineIcons, Feather, FontAwesome, Entypo } from "@expo/vector-icons"
-import { IconButton } from 'react-native-paper';
-
+import { AntDesign, FontAwesome, Entypo } from "@expo/vector-icons"
 
 const RegisterPage = () => {
   const navigation = useNavigation();
@@ -24,7 +20,6 @@ const RegisterPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [modal, setModal] = useState(false)
 
-
   useEffect(() => {
     if (loading) {
       handleRegister();
@@ -34,19 +29,7 @@ const RegisterPage = () => {
   const handleRegister = async () => {
     if (!validateForm()) return;
     try {
-      // const formData = new FormData();
-      // formData.append('username', username);
-      // formData.append('email', email);
-      // formData.append('password', password);
-      // formData.append('location', location);
-      // if (image) {
-      //   formData.append('image', {
-      //     uri: image.uri,
-      //     type: 'image/jpeg',
-      //     name: 'user.jpg'
-      //   });
-      // }
-      const response = await axios.post('http://192.168.5.60:3000/api/register', { username, email, password, location, picture },
+      const response = await axios.post('http://192.168.29.2:3020/api/register', { username, email, password, location, picture },
         {
           headers: {
             'Content-Type': 'application/json'
@@ -129,7 +112,6 @@ const RegisterPage = () => {
     }
   }
 
-
   const handleUpload = (image) => {
     const data = new FormData()
     data.append('file', image)
@@ -204,18 +186,6 @@ const RegisterPage = () => {
       </ScrollView>
       {loading && (
         <View style={styles.loader}>
-          {/* <AnimatedLoader
-      visible={loading}
-      overlayColor="rgba(255,255,255,0.75)"
-      animationStyle={styles.lottie}
-      animationData={require("../assets/loading.json")}
-      speed={1}>
-    </AnimatedLoader> */}
-          {/* <LottieView
-  source={require('../assets/Animation.json')}
-  autoPlay
-  loop
-/> */}
           <View style={styles.loaderBackground}>
             <ActivityIndicator size="large" color={COLORS.primary} />
           </View>
@@ -304,7 +274,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(255, 255, 255, 0.7)", // White background with transparency
+    backgroundColor: "rgba(255, 255, 255, 0.7)", 
   },
   modalView: {
     backgroundColor: "white",

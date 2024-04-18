@@ -3,14 +3,11 @@ import React, { useState } from 'react'
 import CustomButton from '../components/CustomButton'
 import { COLORS, SIZES } from '../constants/theme'
 import Btn from '../components/Btn'
-import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUser } from '../components/auth/userContext'
 
 const LoginPage = () => {
-  const { userData, setUserData } = useUser();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +17,7 @@ const LoginPage = () => {
     if (!validateForm()) return;
   
     try {
-      const response = await axios.post('http://192.168.5.60:3000/api/login', { email, password });
+      const response = await axios.post('http://192.168.29.2:3020/api/login', { email, password });
       if (response.status === 200) {
         
         let promise = new Promise(async (res, rej) => {
@@ -33,7 +30,9 @@ const LoginPage = () => {
             res()
         })
         await Promise.all(promise).then(async() =>{
-          // console.log("User Email ==> ", await AsyncStorage.getItem('userEmail'))
+
+          console.log("User Email when login is clicked ==> ", await AsyncStorage.getItem('userEmail'))
+          console.log("User id when login is clicked ==> ", await AsyncStorage.getItem('userId'))
             navigation.navigate('Profile')
         }
         ).catch(err => {
@@ -41,18 +40,14 @@ const LoginPage = () => {
         })
 
       } else {
-        setErrorMessage("Login failjed");
-        // await AsyncStorage.setItem('userLogin', 'false');
+        setErrorMessage("Login failed");
       }
     } catch (error) {
       console.error('Login failed:', error);
       setErrorMessage(error.response.data.message || 'Invalid email or password');
-      // await AsyncStorage.setItem('userLogin', 'false');
     }
   };
   
-
-
   const validateForm = () => {
     let isValid = true;
 

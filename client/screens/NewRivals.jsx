@@ -7,7 +7,6 @@ import ProductList from '../components/products/ProductList'
 
 const NewRivals = ({ navigation }) => {
 
-    const [cartCount, setCartCount] = useState(0);
   const [totalCartCount, setTotalCartCount] = useState(0);
   const [cartItems, setCartItems] = useState(new Set());
 

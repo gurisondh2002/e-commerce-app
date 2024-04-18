@@ -12,7 +12,7 @@ const useFetch = () => {
     const fetchData = async() =>{
         setIsLoading(true);
         try{
-            const resp = await axios.get('http://localhost:3000/api/products/')
+            const resp = await axios.get('http://localhost:3020/api/products/getllProducts')
             resjson = await resp.json();
             console.log(resjson);
             setData(resp.data);

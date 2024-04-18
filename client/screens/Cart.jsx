@@ -1,59 +1,117 @@
-import { ActivityIndicator, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { COLORS, SIZES } from '../constants/theme';
-import ProductCard from '../components/products/ProductCard';
+// Cart.js
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { Ionicons, SimpleLineIcons, MaterialIcons } from "@expo/vector-icons";
 import axios from 'axios';
-import { Ionicons } from "@expo/vector-icons"
-import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { COLORS, SIZES } from '../constants/theme';
+import { useIsFocused } from '@react-navigation/native';
 
-const Cart = ({ onCountChange, totalCartCount }) => {
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false)
-  const [id, setId] = useState('');
+const Cart = ({ navigation }) => {
+  const [cart, setCart] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState('');
 
-  const navigation = useNavigation()
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchStoredUserData();
+    }
+  }, [isFocused]);
 
   const fetchStoredUserData = async () => {
     try {
-      const storedId = await AsyncStorage.getItem('userId');
-      // console.log(userId)
-      setId(storedId)
-      console.log("ud", id);
-      // console.log(cartCount)
-    } catch (error) {
-      console.error('Error fetching stored user data:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchStoredUserData();
-    handleViewCart();
-  }, []);
-
-
-  const handleViewCart = async () => {
-    try {
-      console.log(id);
-      const res = await axios.get(`http://192.168.5.60:3000/api/carts/find/${id}`);
-      if (res.status === 200) {
-        const cartData = res.data;
-        const productsArray = cartData.message[0].products;
-        console.log(productsArray)
-        setData(productsArray);
-        console.log('Products fetched successfully');
+      const storedUserId = await AsyncStorage.getItem('userId');
+      if (storedUserId) {
+        setUserId(storedUserId);
+        fetchCart(storedUserId);
       } else {
-        console.error(`Request failed with status ${res.status}`);
+        setUserId('');
+        setIsLoading(false);
       }
     } catch (error) {
-      console.error('Error fchingjh products of cart:', error);
+      console.error('Error fetching stored user data:', error);
+      setIsLoading(false);
     }
   };
-  
 
-  const handleCountChange = (count) => {
-    onCountChange(count);
+  const fetchCart = async (userId) => {
+    try {
+      const res = await axios.get(`http://192.168.29.2:3020/api/carts/find/${userId}`);
+      if (res.status === 200) {
+        setCart(res.data.cart);
+        setIsLoading(false);
+        console.log('Cart fetched successfully');
+      } else {
+        console.error(`Request failed with status ${res.status}`);
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.error('Error fetching cart:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const increment = async (productId) => {
+    try {
+      const response = await axios.post(`http://192.168.29.2:3020/api/carts/incCartItemQuantity/${userId}`, { productInCart: productId });
+      console.log(response.data);
+      console.log("Increment successfully")
+    } catch (error) {
+      console.error('Error incrementing quantity:', error);
+    }
   }
+
+  const decrement = async (productId) => {
+    try {
+      const response = await axios.post(`http://192.168.29.2:3020/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
+      console.log(response.data);
+      console.log("Decrement successfully")
+    } catch (error) {
+      console.error('Error decrementing quantity:', error);
+    }
+  };
+
+  const deletecartItem = async (cartId) => {
+    try {
+      const response = await axios.delete(`http://192.168.29.2:3020/api/carts/deleteCartItem/${cartId}`);
+      console.log(response.data);
+      console.log("Deleted successfully")
+    } catch (error) {
+      console.error('Error deleting quantity:', error);
+    }
+  };
+
+  const renderProductItem = ({ item }) => (
+    <View style={styles.productItem}>
+      {item.products.map((product) => (
+        <View key={product._id} style={styles.divContainer}>
+          <Image source={{ uri: product.productInCart.imageUrl }} style={styles.image} />
+          <View style={styles.detailsContainer}>
+            <Text style={styles.title}>{product.productInCart.title}</Text>
+            <Text numberOfLines={2} ellipsizeMode="tail" style={styles.description}>{product.productInCart.description}</Text>
+            <View style={styles.rowContainer}>
+              <Text style={styles.price}>${product.productInCart.price}</Text>
+              <View style={styles.rating}>
+                <TouchableOpacity>
+                  <SimpleLineIcons name="plus" size={20} color="grey" onPress={() => increment(product.productInCart._id)} />
+                </TouchableOpacity>
+                <Text style={styles.quantity}>{product.quantity}</Text>
+                <TouchableOpacity>
+                  <SimpleLineIcons name="minus" size={20} color="grey" onPress={() => decrement(product.productInCart._id)} />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <MaterialIcons name="delete" size={24} color="grey" onPress={() => deletecartItem(product._id)}/>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+
 
   if (isLoading) {
     return (
@@ -62,8 +120,8 @@ const Cart = ({ onCountChange, totalCartCount }) => {
       </View>
     );
   }
+
   return (
-    <ScrollView>
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.container}>
         <View style={styles.firstContainer}>
@@ -72,25 +130,27 @@ const Cart = ({ onCountChange, totalCartCount }) => {
           </TouchableOpacity>
           <Text style={styles.heading}>Your Cart</Text>
         </View>
-        <View style={styles.mapContainer}>
-          <FlatList data={data} numColumns={2}
+        <View style={styles.listContainer}>
+          <FlatList
+            data={cart}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <ProductCard item={item} />}
-            contentContainerStyle={styles.mainContainer}
-            ItemSeparatorComponent={() => <View style={styles.separator} />} />
+            renderItem={renderProductItem}
+            contentContainerStyle={styles.listContent}
+            ItemSeparatorComponent={() => <View style={styles.separator} />}
+          />
         </View>
       </View>
     </SafeAreaView>
-    </ScrollView>
-  )
-}
+  );
+};
 
-export default Cart
+export default Cart;
 
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: COLORS.lightWhite,
+    marginTop: 40
   },
   container: {
     flex: 1,
@@ -108,11 +168,9 @@ const styles = StyleSheet.create({
     top: SIZES.large,
     zIndex: 999,
   },
-  mapContainer:{
-    alignItems: "center",
+  listContainer: {
+    flex: 1,
     paddingTop: SIZES.xxLarge,
-    paddingLeft: SIZES.small / 2,
-    marginTop: 30
   },
   heading: {
     fontFamily: "semibold",
@@ -126,7 +184,64 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
   },
+  productItem: {
+    padding: SIZES.small,
+    marginTop: 30,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    marginRight: SIZES.small,
+    borderRadius: SIZES.small,
+  },
+  divContainer: {
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderColor: COLORS.gray2,
+    borderRadius: SIZES.small,
+    marginBottom: 20,
+    padding: 5
+  },
+  detailsContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  rowContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
+  },
+  title: {
+    fontFamily: "bold",
+    fontSize: SIZES.medium,
+  },
+  rating: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    gap: 5,
+    marginHorizontal: SIZES.large,
+  },
+  supplier: {
+    fontSize: SIZES.small,
+    color: COLORS.gray,
+    marginBottom: SIZES.small,
+  },
+  price: {
+    fontFamily: "bold",
+    fontSize: SIZES.medium
+  },
+  description: {
+    fontFamily: "bold",
+    fontSize: SIZES.small,
+    marginBottom: SIZES.small,
+    color: COLORS.gray
+  },
+  quantity: {
+    fontSize: SIZES.small,
+    fontWeight: 'bold'
+  },
   separator: {
     height: 16,
   },
-})
+});

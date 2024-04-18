@@ -14,7 +14,7 @@ const Products = ({ onCountChange, totalCartCount }) => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get('http://192.168.5.60:3000/api/products/');
+        const response = await axios.get('http://192.168.29.2:3020/api/products/getllProducts');
         setData(response.data);
         setIsLoading(false);
       } catch (error) {

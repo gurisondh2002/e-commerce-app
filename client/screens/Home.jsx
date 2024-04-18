@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useId, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Ionicons, Fontisto } from "@expo/vector-icons"
 import { SIZES, COLORS } from '../constants/theme'
@@ -9,7 +9,7 @@ import Heading from '../components/home/Heading'
 import Products from '../components/products/Products'
 import * as Location from 'expo-location';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'
+import { useIsFocused, useNavigation } from '@react-navigation/native'
 import { useUser } from '../components/auth/userContext'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -18,44 +18,46 @@ const Home = () => {
   const { userData } = useUser();
 
   const [locationName, setLocationName] = useState('');
-  const [userId, setUserId] = useState(false);
   const [id, setId] = useState('');
   const [errorMsg, setErrorMsg] = useState(null);
   const [cartCount, setCartCount] = useState();
 
+  const isFocused = useIsFocused();
   useEffect(() => {
-    fetchStoredUserData();
-    if (userId === 'true') {
-      console.log(AsyncStorage.getItem('userEmail'))
-      getCountCart();
-      // console.log(cartCount); 
-    } else {
-      setCartCount(0);
+    if (isFocused) {
+      fetchStoredUserData().then((strId) => {
+        if (strId) {
+          getCountCart(strId);
+        } else {
+          setCartCount(0);
+        }
+      });
     }
-  }, [userId]);
+  }, [isFocused]);
 
   const fetchStoredUserData = async () => {
     try {
-      const storedUserId = await AsyncStorage.getItem('userLogin');
       const storedId = await AsyncStorage.getItem('userId');
-      setUserId(storedUserId); 
-      // console.log(userId)
-      setId(storedId)
-      console.log("usersdjfId", id);
-      // console.log(cartCount)
+      console.log("Stored Id ===> ", storedId)
+      if (storedId) {
+        console.log("Was in setId")
+        setId(storedId)
+        return storedId
+      } else {
+        setId('')
+      }
     } catch (error) {
       console.error('Error fetching stored user data:', error);
     }
   };
-  
-  const getCountCart = async () => {
+
+  const getCountCart = async (strId) => {
     try {
-      // console.log("text",id)
-      const resp = await axios.get(`http://192.168.5.60:3000/api/carts/getCart/${id}`);
+      const resp = await axios.get(`http://192.168.29.2:3020/api/carts/getCart/${strId}`);
       if (resp.status === 200) {
         console.log(resp.data.totalProductQuantity)
         setCartCount(resp.data.totalProductQuantity);
-        
+
       } else {
         console.error(`Request failcedfdd mwith statcus ${resp.status}`);
       }
@@ -94,33 +96,33 @@ const Home = () => {
     }
   };
 
-  const handleCartClick = () =>{
+  const handleCartClick = () => {
     navigation.navigate("Cart")
   }
-  
+
   return (
     <SafeAreaView>
       <ScrollView>
-      <View style={styles.mainContainer}>
-        <View style={styles.container}>
-          <Ionicons name="location-outline" size={24} />
-          <Text style={styles.textStyle}>{locationName || 'Fetching location...'}</Text>
-          <View style={{ alignItems: "flex-end" }}>
-            <View style={styles.cartCount}>
-              <Text style={styles.cartNumber}>{cartCount}</Text>
+        <View style={styles.mainContainer}>
+          <View style={styles.container}>
+            <Ionicons name="location-outline" size={24} />
+            <Text style={styles.textStyle}>{locationName || 'Fetching location...'}</Text>
+            <View style={{ alignItems: "flex-end" }}>
+              <View style={styles.cartCount}>
+                <Text style={styles.cartNumber}>{cartCount}</Text>
+              </View>
+              <TouchableOpacity>
+                <Fontisto name="shopping-bag" size={24} onPress={handleCartClick} />
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity>
-              <Fontisto name="shopping-bag" size={24} onPress={handleCartClick}/>
-            </TouchableOpacity>
           </View>
         </View>
-      </View>
-      <ScrollView>
-        <Welcome />
-        <Carousel/>
-        <Heading/>
-        <Products />
-      </ScrollView>
+        <ScrollView>
+          <Welcome />
+          <Carousel />
+          <Heading />
+          <Products />
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   )
