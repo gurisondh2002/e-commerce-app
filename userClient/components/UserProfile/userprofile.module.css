@@ -1,0 +1,49 @@
+.mainContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top:30px;
+    padding-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.userContainer{
+    margin-top: 100px;
+    display: flex;
+    border: 1px solid lightgrey;
+    box-shadow: 20px 20px 50px grey;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 100px;
+    width: fit-content;
+    padding-top: 80px;
+    padding-bottom: 80px;
+    padding-left: 120px;
+    padding-right: 120px;
+    border-radius: 5px;
+    background-color: rgb(234, 242, 248);
+}
+.textContent input{
+    display: flex;
+    flex-direction: column;
+    padding: 6px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 10px 10px 20px grey;
+}
+.textContent button{
+    padding:6px;
+    width: 100%;
+    background-color: rgb(127, 179, 213);
+    border: none;
+    border-radius: 5px;
+    margin:10px;
+}
+.textContent button:hover{
+    background-color: rgb(41, 128, 185);
+    border: none;
+    border-radius: 5px;
+    color: white;
+}

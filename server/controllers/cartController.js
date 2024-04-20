@@ -37,9 +37,17 @@ module.exports = {
         const userId = req.params.id;
 
         try {
-            const cart = await Cart.find({ userId }).populate('products.productInCart');
+            let cart = await Cart.findOne({ userId }).populate('products.productInCart');
+            let total = 0;
+            for (const item of cart.products) {
+                item.subtotal = item.productInCart.price * item.quantity;
+                total += item.subtotal;
+                item.save();
+            }
+            cart.total = total;
+            cart = await cart.save();
             res.status(200).json({ cart, message: "Cart fetched successfully" });
-            console.log(cart)
+            console.log(cart);
         }
         catch (err) {
             res.status(500).json({ message: err });

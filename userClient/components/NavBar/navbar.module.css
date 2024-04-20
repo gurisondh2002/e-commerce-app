@@ -1,0 +1,10 @@
+.logo{
+    margin-right: 50px !important;
+    margin-left: 0 !important;
+    width:30px !important;
+    height:30px !important;
+}
+
+.navBarContainer{
+    z-index: 1000;
+}

@@ -1,0 +1,16 @@
+.servicesListing{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 25px;
+    flex-wrap: wrap;
+    gap:20px;
+}
+.servicesListing li{
+    list-style: none;
+}
+.serviceShipping{
+    display:flex;
+    align-items: center;
+    justify-content: center; 
+}

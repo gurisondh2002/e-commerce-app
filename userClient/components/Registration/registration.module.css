@@ -1,0 +1,53 @@
+.containerMain{
+    padding-top:30px;
+    padding-bottom: 30px;
+    padding-left: 10px;
+    padding-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-image: url('/assets/register.htm'); */
+    /* background-color: rgba(253, 255, 250, 0.491); */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.registerContainer{
+    margin-top: 100px;
+    display: flex;
+    border: 1px solid lightgrey;
+    box-shadow: 20px 20px 50px grey;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 100px;
+    width: fit-content;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+    border-radius: 5px;
+    background-color: rgb(234, 242, 248);
+}
+.registerInput{
+    display: flex;
+    flex-direction: column;
+}
+.registerInput input{
+    padding: 6px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 10px 10px 20px grey;
+}
+.registerInput button{
+    padding:6px;
+    background-color: rgb(127, 179, 213);
+    border: none;
+    border-radius: 5px;
+}
+.registerInput button:hover{
+    background-color: rgb(41, 128, 185);
+    border: none;
+    border-radius: 5px;
+    color: white;
+}
