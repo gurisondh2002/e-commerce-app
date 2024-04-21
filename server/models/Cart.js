@@ -25,6 +25,10 @@ const CartSchema = new mongoose.Schema({
     total: {
         type: Number,
         default: 0,
+    },
+    freeDelivery: {
+        type: Number,
+        default: 0.00,
     }
 },{timestamps:true});
 

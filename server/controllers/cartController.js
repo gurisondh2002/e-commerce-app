@@ -44,12 +44,18 @@ module.exports = {
                 total += item.subtotal;
                 item.save();
             }
-            cart.total = total;
+            let deliveryFee = 0;
+            if (total < 250) {
+                deliveryFee = Math.floor(Math.random() * 100) + 1;
+            }
+    
+            cart.total = total + deliveryFee;
+            cart.freeDelivery = deliveryFee;
+    
             cart = await cart.save();
             res.status(200).json({ cart, message: "Cart fetched successfully" });
             console.log(cart);
-        }
-        catch (err) {
+        } catch (err) {
             res.status(500).json({ message: err });
             console.log(err)
         }

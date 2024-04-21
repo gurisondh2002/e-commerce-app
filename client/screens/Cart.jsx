@@ -12,6 +12,7 @@ const Cart = ({ navigation }) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [free, setFree] = useState('')
   const [userId, setUserId] = useState('');
 
   const isFocused = useIsFocused();
@@ -45,6 +46,7 @@ const Cart = ({ navigation }) => {
         console.log("Cart data fetched:", res.data.cart.products);
         setCart(res.data.cart.products);
         setTotal(res.data.cart.total)
+        setFree(res.data.cart.freeDelivery)
         setIsLoading(false);
         console.log('Cart fetched successfully');
       } else {
@@ -91,6 +93,10 @@ const Cart = ({ navigation }) => {
           </View>
           <View style={styles.totalContainer}>
             <Text style={styles.total}>Order Info:</Text>
+            <View style={styles.totalOrder}>
+              <Text style={styles.total1}>Delivery Fee:</Text>
+              <Text style={styles.total}>$ {free}</Text>
+            </View>
             <View style={styles.totalOrder}>
               <Text style={styles.total1}>Total:</Text>
               <Text style={styles.total}>$ {total}</Text>

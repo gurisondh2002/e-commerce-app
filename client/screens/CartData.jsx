@@ -8,7 +8,30 @@ import { useIsFocused } from '@react-navigation/native';
 
 
 const RenderProductItem = ({ item }) => {
-    // console.log("Rendering cart item:", item);
+    const [userId, setUserId] = useState('');
+
+    const isFocused = useIsFocused();
+  
+    useEffect(() => {
+      if (isFocused) {
+        fetchStoredUserData();
+      }
+    }, [isFocused]);
+  
+    const fetchStoredUserData = async () => {
+      try {
+        const storedUserId = await AsyncStorage.getItem('userId');
+        if (storedUserId) {
+          setUserId(storedUserId);
+        } else {
+          setUserId('');
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching stored user data:', error);
+        setIsLoading(false);
+      }
+    };
 
     const increment = async (productId) => {
         try {

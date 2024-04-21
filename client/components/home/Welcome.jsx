@@ -17,7 +17,7 @@ const Welcome = () => {
                 <Text style={styles.textStyleA}>{" "}
                     Find The Most</Text>
                 <Text style={styles.textStyleB}>{" "}
-                    Luxurious Furniture</Text>
+                    Luxurious Products</Text>
             </View>
             <View style={styles.searchContainer}>
                 <TouchableOpacity>
