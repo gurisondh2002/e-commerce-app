@@ -7,7 +7,9 @@ const productRouter = require("./routes/ProductRoute");
 const authRouter = require("./routes/auth")
 const userRouter = require("./routes/user")
 const cartRouter = require("./routes/cart")
+const favRouter = require("./routes/favourites")
 const orderRouter = require("./routes/order")
+const addressRouter = require("./routes/address")
 const port = 3020;
 
 
@@ -27,6 +29,8 @@ app.use('/api/products', productRouter);
 app.use('/api',authRouter);
 app.use('/api/users',userRouter);
 app.use('/api/carts',cartRouter);
+app.use('/api/favourites',favRouter);
+app.use('/api',addressRouter);
 app.use('/api/orders',orderRouter);
 
 app.listen(process.env.PORT || port , () =>{

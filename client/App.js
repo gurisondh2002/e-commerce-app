@@ -15,6 +15,8 @@ import Cart from './screens/Cart';
 import RegisterPage from './screens/RegisterPage';
 import { UserProvider } from './components/auth/userContext';
 import updateProfile from './screens/updateProfile';
+import Address from './screens/Address'
+import OrderComplete from './screens/OrderComplete';
 
 
 const Stack = createNativeStackNavigator();
@@ -55,6 +57,8 @@ export default function App() {
         <Stack.Screen name="Orders" component={Orders} options={{ headerShown:false}}/>
         <Stack.Screen name="Cart" component={Cart} options={{ headerShown:false}}/>      
         <Stack.Screen name="UpdateUser" component={updateProfile} options={{ headerShown:false}}/>
+        <Stack.Screen name="OrderComplete" component={OrderComplete} options={{ headerShown:false}}/>
+        <Stack.Screen name="Address" component={Address} options={{ headerShown:false}}/>
       </Stack.Navigator>
     </NavigationContainer>
     </UserProvider>

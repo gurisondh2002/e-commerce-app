@@ -6,8 +6,8 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'guri200802@gmail.com',
-    pass: 'legmxipbqvmrxkxw'
+    user: 'gkaur8_be20@thapar.edu',
+    pass: 'djksyhhojjihhqyy'
   }
 });
 
@@ -53,7 +53,7 @@ module.exports = {
             `,
             attachments: [{
               filename: 'welcome_image.png',
-              path: 'C:/Users/dell/Desktop/Projects/e-commerce App/server/welcome_image.png',
+              path: 'C:/Users/rajgu/OneDrive/Desktop/Projects/Working Imp Projects/e-commerce-app/e-commerce-app/server/welcome_image.png',
               cid: 'welcomeImage'
             }]
           };

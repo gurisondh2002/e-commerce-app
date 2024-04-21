@@ -64,7 +64,10 @@ const Cart = ({ navigation }) => {
       </View>
     );
   }
-  const totalPrice = cart.reduce((total, product) => total + product.price, 0);
+
+  const handleCheckoutPress = () =>{
+    navigation.navigate("Address")
+  }
 
 
   return (
@@ -92,7 +95,7 @@ const Cart = ({ navigation }) => {
               <Text style={styles.total1}>Total:</Text>
               <Text style={styles.total}>$ {total}</Text>
             </View>
-            <Btn style={styles.btnStyle} title={`C h e c k o u t   $ ${total}`} />
+            <Btn style={styles.btnStyle} title={`C h e c k o u t   $ ${total}`} onPress={handleCheckoutPress}/>
           </View>
         </View>
       </ScrollView>
@@ -106,7 +109,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: COLORS.lightWhite,
-    marginTop: 40
+    marginTop: 20
   },
   container: {
     flex: 1,

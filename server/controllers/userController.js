@@ -14,8 +14,7 @@ module.exports = {
 
     getUser : async(req,res) =>{
         try{
-            const user = await User.findById(req.params.id);
-
+            const user = await User.findById(req.params.id).populate('addresses')
             if(!user){
                 return res.status(401).json({message : "User does not exist..."});
             }
@@ -26,5 +25,5 @@ module.exports = {
         catch(err){
             res.status(500).json({message : err});
         }
-    }
+    },
 }

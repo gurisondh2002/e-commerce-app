@@ -2,37 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { Ionicons, SimpleLineIcons, MaterialIcons } from "@expo/vector-icons";
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SIZES } from '../constants/theme';
-import { useIsFocused } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 
-const RenderProductItem = ({ item }) => {
-    // console.log("Rendering cart item:", item);
+const RenderFavItem = ({ item}) => {
 
-    const increment = async (productId) => {
+    const navigation = useNavigation()
+
+    const deleteCartItem = async (favId) => {
         try {
-            const response = await axios.post(`http://192.168.29.2:3020/api/carts/incCartItemQuantity/${userId}`, { productInCart: productId });
-            console.log(response.data);
-            console.log("Increment successfully");
-        } catch (error) {
-            console.error('Error incrementing quantity:', error);
-        }
-    }
-
-    const decrement = async (productId) => {
-        try {
-            const response = await axios.post(`http://192.168.29.2:3020/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
-            console.log(response.data);
-            console.log("Decrement successfully");
-        } catch (error) {
-            console.error('Error decrementing quantity:', error);
-        }
-    };
-
-    const deleteCartItem = async (cartId) => {
-        try {
-            const response = await axios.delete(`http://192.168.29.2:3020/api/carts/deleteCartItem/${cartId}`);
+            const response = await axios.delete(`http://192.168.29.2:3020/api/favourites/deleteFavItem/${favId}`);
             console.log(response.data);
             console.log("Deleted successfully");
         } catch (error) {
@@ -40,38 +20,34 @@ const RenderProductItem = ({ item }) => {
         }
     };
 
+    const productHandler = () => {
+        navigation.navigate("ProductDetails", { item: item.productInFav });
+    };
+
     return (
-        <View style={styles.productItem}>
-            <View key={item.productInCart._id} style={styles.divContainer}>
-                <Image source={{ uri: item.productInCart.imageUrl }} style={styles.image} />
+        <TouchableOpacity onPress={productHandler}>
+        <View style={styles.productItem} >
+            <View key={item.productInFav._id} style={styles.divContainer}>
+                <Image source={{ uri: item.productInFav.imageUrl }} style={styles.image} />
                 <View style={styles.detailsContainer}>
-                    <Text style={styles.title}>{item.productInCart.title}</Text>
-                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.description}>{item.productInCart.description}</Text>
+                    <Text style={styles.title}>{item.productInFav.title}</Text>
+                    <Text numberOfLines={1} ellipsizeMode="tail" style={styles.description}>{item.productInFav.description}</Text>
                     <View style={styles.rowContainer}>
-                        <Text style={styles.price}>${item.productInCart.price}</Text>
+                        <Text style={styles.price}>${item.productInFav.price}</Text>
                         <View style={styles.rating}>
-                            <TouchableOpacity>
-                                <SimpleLineIcons name="plus" size={20} color="grey" onPress={() => increment(item.productInCart._id)} />
-                            </TouchableOpacity>
-                            <Text style={styles.quantity}>{item.quantity}</Text>
-                            <TouchableOpacity>
-                                <SimpleLineIcons name="minus" size={20} color="grey" onPress={() => decrement(item.productInCart._id)} />
-                            </TouchableOpacity>
                             <TouchableOpacity>
                                 <MaterialIcons name="delete" size={24} color="grey" onPress={() => deleteCartItem(item._id)} />
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={styles.rowContainer}>
-                        <Text style={styles.price1}>Subtotal: {item.subtotal}</Text>
-                    </View>
                 </View>
             </View>
         </View>
+        </TouchableOpacity>
     );
 };
 
-export default RenderProductItem;
+export default RenderFavItem;
 
 const styles = StyleSheet.create({
     productItem: {
