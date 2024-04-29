@@ -39,8 +39,8 @@ const Profile = () => {
         if (sul) {
           let promise = new Promise(async (res, rej) => {
             setName(await AsyncStorage.getItem('userName'))
-            setEmail(await AsyncStorage.getItem('userId'))
-            setUserrId(await AsyncStorage.getItem('userEmail'))
+            setEmail(await AsyncStorage.getItem('userEmail'))
+            setUserrId(await AsyncStorage.getItem('userId'))
             setUserrPic(await AsyncStorage.getItem('userPic'))
             res()
           })

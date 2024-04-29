@@ -209,7 +209,7 @@ export default function MapScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView>
+      <ScrollView nestedScrollEnabled={true} style={{width:"100%"}}>
         <View style={styles.container}>
           <View style={styles.firstContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -251,18 +251,24 @@ export default function MapScreen({ navigation }) {
           <View>
             <Text style={styles.addressFont}>Select Address </Text>
             <View style={styles.listContainer}>
-              <FlatList
-                data={address}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => <RenderAddress
-                  item={item}
-                  selected={item._id === selectedAddressId}
-                  onPress={() => setSelectedAddressId(item._id)}
-                />}
-                contentContainerStyle={styles.listContent}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
-              />
+              <ScrollView horizontal={true} style={{ minWidth: "100%", padding: 0, margin: 0,}}>
+                <FlatList
+                  style={{ flex: 1, minWidth: "103%", padding: 0, margin: 0 }}
+                  data={address}
+                  keyExtractor={(item) => item._id}
+                  renderItem={({ item }) => (
+                    <RenderAddress
+                      item={item}
+                      selected={item._id === selectedAddressId}
+                      onPress={() => setSelectedAddressId(item._id)}
+                    />
+                  )}
+                  contentContainerStyle={styles.listContent}
+                  ItemSeparatorComponent={() => <View style={styles.separator} />}
+                />
+              </ScrollView>
             </View>
+
           </View>
           <View>
             <TouchableOpacity style={styles.btnStyle1} onPress={handleAddNewAddress}>

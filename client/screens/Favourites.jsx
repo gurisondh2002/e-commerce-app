@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { Ionicons, SimpleLineIcons, MaterialIcons } from "@expo/vector-icons";
 import axios from 'axios';
+import { ScrollView } from 'react-native-virtualized-view'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SIZES } from '../constants/theme';
 import { useIsFocused } from '@react-navigation/native';

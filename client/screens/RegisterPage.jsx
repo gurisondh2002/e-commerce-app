@@ -36,7 +36,7 @@ const RegisterPage = () => {
           },
         });
       if (response.status === 201) {
-        Alert.alert(` is saved successfuly`)
+        // Alert.alert(` is saved successfuly`)
         navigation.navigate('Login');
         console.log(response.data);
       } else {
@@ -76,7 +76,7 @@ const RegisterPage = () => {
         aspect: [1, 1],
         quality: 0.5
       })
-      if (!data.cancelled) {
+      if (!data.canceled) {
         let newfile = {
           uri: data.uri,
           type: `test/${data.uri.split(".")[1]}`,

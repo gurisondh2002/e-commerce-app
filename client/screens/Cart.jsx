@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image, ScrollView } from 'react-native';
+import { ActivityIndicator, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import { ScrollView } from 'react-native-virtualized-view'
 import { Ionicons, SimpleLineIcons, MaterialIcons } from "@expo/vector-icons";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -45,8 +46,8 @@ const Cart = ({ navigation }) => {
       if (res.status === 200) {
         console.log("Cart data fetched:", res.data.cart.products);
         setCart(res.data.cart.products);
-        setTotal(res.data.cart.total)
-        setFree(res.data.cart.freeDelivery)
+        setTotal(res.data.cart.total);
+        setFree(res.data.cart.freeDelivery);
         setIsLoading(false);
         console.log('Cart fetched successfully');
       } else {
@@ -59,18 +60,42 @@ const Cart = ({ navigation }) => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size={SIZES.xxLarge} color={COLORS.primary} />
-      </View>
-    );
+  const handleIncrement = async (productId, price) => {
+    try {
+      const response = await axios.post(`http://192.168.29.2:3020/api/carts/incCartItemQuantity/${userId}`, { productInCart: productId });
+      console.log(response.data);
+      fetchCart(userId); // Re-fetch cart data
+      console.log("Increment successfully");
+    } catch (error) {
+      console.error('Error incrementing quantity:', error);
+    }
   }
+
+  const handleDecrement = async (productId, price) => {
+    try {
+      const response = await axios.post(`http://192.168.29.2:3020/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
+      console.log(response.data);
+      fetchCart(userId); // Re-fetch cart data
+      console.log("Decrement successfully");
+    } catch (error) {
+      console.error('Error decrementing quantity:', error);
+    }
+  };
+
+  const handleDelete = async (cartId) => {
+    try {
+      const response = await axios.delete(`http://192.168.29.2:3020/api/carts/deleteCartItem/${cartId}`);
+      console.log(response.data);
+      fetchCart(userId); // Re-fetch cart data
+      console.log("Deleted successfully");
+    } catch (error) {
+      console.error('Error deleting quantity:', error);
+    }
+  };
 
   const handleCheckoutPress = () =>{
     navigation.navigate("Address")
   }
-
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -86,7 +111,14 @@ const Cart = ({ navigation }) => {
             <FlatList
               data={cart}
               keyExtractor={(item) => item._id}
-              renderItem={({ item }) => <RenderProductItem item={item} />}
+              renderItem={({ item }) => (
+                <RenderProductItem 
+                  item={item} 
+                  onIncrement={handleIncrement} 
+                  onDecrement={handleDecrement} 
+                  onDelete={handleDelete} 
+                />
+              )}
               contentContainerStyle={styles.listContent}
               ItemSeparatorComponent={() => <View style={styles.separator} />}
             />
@@ -177,3 +209,4 @@ const styles = StyleSheet.create({
     color: COLORS.gray2
   }
 });
+

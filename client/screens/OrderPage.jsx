@@ -12,7 +12,7 @@ const OrderPage = ({item}) => {
             <Text>Payment Method: {item.payment_method}</Text>
             <Text>Payment Status: {item.payment_status}</Text>
             <Text>Delivery Date: {item.delivery_date}</Text>
-            {/* Add more order details as needed */}
+            {/* Add more order details as needordeed */}
         </View>
     );
 };
