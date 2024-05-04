@@ -8,7 +8,7 @@ import DeleteModal from './DeleteModal';
 import axios from 'axios'
 
 
-const RenderProductItem = ({ item, selected, onPress }) => {
+const RenderProductItem = ({ item, selected, onPress, onEdit, onDelete }) => {
 
     const [editModalVisible, setEditModalVisible] = useState(false);
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -82,7 +82,12 @@ const RenderProductItem = ({ item, selected, onPress }) => {
                     </View>
                 </View>
             </TouchableOpacity>
-            <EditModal isVisible={editModalVisible} onClose={handleCloseEditModal} item={item} />
+            <EditModal
+                isVisible={editModalVisible}
+                onClose={handleCloseEditModal}
+                item={item}
+                onEdit={onEdit}
+            />
             <DeleteModal isVisible={deleteModalVisible} onClose={handleCloseDeleteModal} onDelete={handleDeleteConfirm} item={item} />
         </View>
     );

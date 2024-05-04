@@ -17,7 +17,7 @@ export default function MapScreen({ navigation }) {
   const [address, setAddress] = useState([]);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
   const [selectedAddressId, setSelectedAddressId] = useState(null);
   const mapRef = useRef(null);
   const [userId, setUserId] = useState('');
@@ -75,12 +75,14 @@ export default function MapScreen({ navigation }) {
 
   const fetchAddresses = async (userId) => {
     try {
+      setIsLoading(true);
       const res = await axios.get(`http://192.168.29.2:3020/api/users/${userId}`);
       if (res.status === 200) {
         setAddress(res.data.addresses)
         console.log("User data ==> ", res.data.addresses)
         setIsLoading(false);
         console.log('User fetched successfully');
+        setIsLoading(false);
       } else {
         console.error(`Request failed with status ${res.status}`);
         setIsLoading(false);
@@ -128,8 +130,9 @@ export default function MapScreen({ navigation }) {
     }, 3000);
   };
 
-  const handleAddNewAddress = () => {
+  const handleAddNewAddress = async () => {
     setModalVisible(true);
+    await fetchAddresses(userId);
   };
 
   const handleSaveNewAddress = async () => {
@@ -156,6 +159,7 @@ export default function MapScreen({ navigation }) {
         country: '',
         phoneNumber: ''
       });
+      setAddress([...address, response.data.newAddress]);
       console.log("Address added successfully");
     } catch (error) {
       console.error('Error adding address:', error);
@@ -206,10 +210,42 @@ export default function MapScreen({ navigation }) {
     });
   };
 
+  const handleEdit = (address) => {
+    setNewAddress(address);
+    setSelectedAddressId(address._id);
+    // openEditModal();
+  };
+
+  const handleDelete = async (addressId) => {
+    try {
+      const res = await axios.delete(`http://192.168.29.2:3020/api/addresses/${addressId}`);
+      if (res.status === 200) {
+        fetchAddresses(userId);
+        console.log('Address deleted successfully');
+      } else {
+        console.error(`Request failed with status ${res.status}`);
+      }
+    } catch (error) {
+      console.error('Error deleting address:', error);
+    }
+  };
+
+  const openEditModal = () => {
+    setModalVisible(true);
+  };
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={SIZES.xxLarge} color={COLORS.primary} />
+      </View>
+    );
+  }
+
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <ScrollView nestedScrollEnabled={true} style={{width:"100%"}}>
+      <ScrollView nestedScrollEnabled={true}>
         <View style={styles.container}>
           <View style={styles.firstContainer}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -251,9 +287,9 @@ export default function MapScreen({ navigation }) {
           <View>
             <Text style={styles.addressFont}>Select Address </Text>
             <View style={styles.listContainer}>
-              <ScrollView horizontal={true} style={{ minWidth: "100%", padding: 0, margin: 0,}}>
+              <ScrollView horizontal={true} style={{ padding: 0, margin: 0, }}>
                 <FlatList
-                  style={{ flex: 1, minWidth: "103%", padding: 0, margin: 0 }}
+                  style={{ flex: 1, width: "103%", padding: 0, margin: 0 }}
                   data={address}
                   keyExtractor={(item) => item._id}
                   renderItem={({ item }) => (
@@ -261,6 +297,8 @@ export default function MapScreen({ navigation }) {
                       item={item}
                       selected={item._id === selectedAddressId}
                       onPress={() => setSelectedAddressId(item._id)}
+                      onEdit={() => handleEdit(item)}
+                      onDelete={() => handleDelete(item._id)}
                     />
                   )}
                   contentContainerStyle={styles.listContent}
@@ -409,9 +447,7 @@ export default function MapScreen({ navigation }) {
       </Modal>
     </SafeAreaView>
   );
-}
-
-const styles = StyleSheet.create({
+} const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: COLORS.lightWhite,

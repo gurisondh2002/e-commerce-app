@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const EditModal = ({ isVisible, onClose, item }) => {
+const EditModal = ({ isVisible, onClose, item, onEdit}) => {
     const [userId, setUserId] = useState('');
     const isFocused = useIsFocused();
     const [newAddress, setNewAddress] = useState({
@@ -67,15 +67,7 @@ const EditModal = ({ isVisible, onClose, item }) => {
             console.log(response.data);
             console.log("Address edit successful");
             onClose();
-            setNewAddress({
-                fullName: '',
-                houseNo: '',
-                city: '',
-                state: '',
-                postalCode: '',
-                country: '',
-                phoneNumber: ''
-            });
+            onEdit(response.data.updateAddress);
         } catch (error) {
             console.error('Error editing address:', error);
         }

@@ -21,7 +21,6 @@ const ProductList = () => {
     };
 
     useEffect(() => {
-  
       fetchData();
     }, []);
 

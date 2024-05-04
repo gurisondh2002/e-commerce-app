@@ -12,7 +12,7 @@ import Btn from '../components/Btn'
 const Cart = ({ navigation }) => {
   const [cart, setCart] = useState([]);
   const [total, setTotal] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading , setIsLoading] = useState(false)
   const [free, setFree] = useState('')
   const [userId, setUserId] = useState('');
 
@@ -42,6 +42,7 @@ const Cart = ({ navigation }) => {
 
   const fetchCart = async (userId) => {
     try {
+      // setIsLoading(true);
       const res = await axios.get(`http://192.168.29.2:3020/api/carts/find/${userId}`);
       if (res.status === 200) {
         console.log("Cart data fetched:", res.data.cart.products);
@@ -50,6 +51,7 @@ const Cart = ({ navigation }) => {
         setFree(res.data.cart.freeDelivery);
         setIsLoading(false);
         console.log('Cart fetched successfully');
+        // setIsLoading(false);
       } else {
         console.error(`Request failed with status ${res.status}`);
         setIsLoading(false);
@@ -75,7 +77,7 @@ const Cart = ({ navigation }) => {
     try {
       const response = await axios.post(`http://192.168.29.2:3020/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
       console.log(response.data);
-      fetchCart(userId); // Re-fetch cart data
+      fetchCart(userId);
       console.log("Decrement successfully");
     } catch (error) {
       console.error('Error decrementing quantity:', error);
@@ -86,15 +88,23 @@ const Cart = ({ navigation }) => {
     try {
       const response = await axios.delete(`http://192.168.29.2:3020/api/carts/deleteCartItem/${cartId}`);
       console.log(response.data);
-      fetchCart(userId); // Re-fetch cart data
+      fetchCart(userId);
       console.log("Deleted successfully");
     } catch (error) {
       console.error('Error deleting quantity:', error);
     }
   };
 
-  const handleCheckoutPress = () =>{
+  const handleCheckoutPress = () => {
     navigation.navigate("Address")
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size={SIZES.xxLarge} color={COLORS.primary} />
+      </View>
+    );
   }
 
   return (
@@ -112,11 +122,11 @@ const Cart = ({ navigation }) => {
               data={cart}
               keyExtractor={(item) => item._id}
               renderItem={({ item }) => (
-                <RenderProductItem 
-                  item={item} 
-                  onIncrement={handleIncrement} 
-                  onDecrement={handleDecrement} 
-                  onDelete={handleDelete} 
+                <RenderProductItem
+                  item={item}
+                  onIncrement={handleIncrement}
+                  onDecrement={handleDecrement}
+                  onDelete={handleDelete}
                 />
               )}
               contentContainerStyle={styles.listContent}
@@ -131,9 +141,9 @@ const Cart = ({ navigation }) => {
             </View>
             <View style={styles.totalOrder}>
               <Text style={styles.total1}>Total:</Text>
-              <Text style={styles.total}>$ {total}</Text>
+              <Text style={styles.total}>$ {(+total).toFixed(2)}</Text>
             </View>
-            <Btn style={styles.btnStyle} title={`C h e c k o u t   $ ${total}`} onPress={handleCheckoutPress}/>
+            <Btn style={styles.btnStyle} title={`C h e c k o u t   $${(+total).toFixed(2)}`} onPress={handleCheckoutPress} />
           </View>
         </View>
       </ScrollView>

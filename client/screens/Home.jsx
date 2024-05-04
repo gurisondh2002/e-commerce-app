@@ -1,26 +1,26 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useId, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Ionicons, Fontisto } from "@expo/vector-icons"
-import { SIZES, COLORS } from '../constants/theme'
-import Welcome from '../components/home/Welcome'
-import Carousel from '../components/Carousel'
-import Heading from '../components/home/Heading'
-import Products from '../components/products/Products'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons, Fontisto } from "@expo/vector-icons";
+import { SIZES, COLORS } from '../constants/theme';
+import Welcome from '../components/home/Welcome';
+import Carousel from '../components/Carousel';
+import Heading from '../components/home/Heading';
+import Products from '../components/products/Products';
 import * as Location from 'expo-location';
 import axios from 'axios';
-import { useIsFocused, useNavigation } from '@react-navigation/native'
-import { useUser } from '../components/auth/userContext'
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useUser } from '../components/auth/userContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
-
   const { userData } = useUser();
 
   const [locationName, setLocationName] = useState('');
   const [id, setId] = useState('');
   const [errorMsg, setErrorMsg] = useState(null);
-  const [cartCount, setCartCount] = useState();
+  const [cartCount, setCartCount] = useState(0);
+  const [cartIconColor, setCartIconColor] = useState('black');
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -57,12 +57,11 @@ const Home = () => {
       if (resp.status === 200) {
         console.log(resp.data.totalProductQuantity)
         setCartCount(resp.data.totalProductQuantity);
-
       } else {
-        console.error(`Request failcedfdd mwith statcus ${resp.status}`);
+        console.error(`Request failed with status ${resp.status}`);
       }
     } catch (error) {
-      console.error('Error fetchihng cart count:', error);
+      console.error('Error fetching cart count:', error);
     }
   };
 
@@ -72,7 +71,7 @@ const Home = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
+      if (status!== 'granted') {
         setErrorMsg('Permission to access location was denied');
         return;
       }
@@ -92,13 +91,21 @@ const Home = () => {
       }
     } catch (error) {
       console.error('Error fetching location:', error);
-      setErrorMsg('Error fetchinng location');
+      setErrorMsg('Error fetching location');
     }
   };
 
   const handleCartClick = () => {
     navigation.navigate("Cart")
   }
+
+  const updateCartCount = useCallback((newCount) => {
+    setCartCount(newCount);
+  }, []);
+
+  const updateCartIconColor = useCallback((color) => {
+    setCartIconColor(color);
+  }, []);
 
   return (
     <SafeAreaView>
@@ -112,7 +119,7 @@ const Home = () => {
                 <Text style={styles.cartNumber}>{cartCount}</Text>
               </View>
               <TouchableOpacity>
-                <Fontisto name="shopping-bag" size={24} onPress={handleCartClick} />
+                <Fontisto name="shopping-bag" size={24} onPress={handleCartClick} color={cartIconColor}/>
               </TouchableOpacity>
             </View>
           </View>
@@ -121,7 +128,7 @@ const Home = () => {
           <Welcome />
           <Carousel />
           <Heading />
-          <Products />
+          <Products updateCartCount={updateCartCount} updateCartIconColor={updateCartIconColor} />
         </ScrollView>
       </ScrollView>
     </SafeAreaView>
@@ -142,7 +149,7 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontFamily: "semibold",
-    fontSize: SIZES.medium,
+fontSize: SIZES.medium,
     color: COLORS.gray,
   },
   cartCount: {
