@@ -8,7 +8,7 @@ module.exports = {
             await newAddress.save();
             const userId = req.body.userId; 
             await User.findByIdAndUpdate(userId, { $push: { addresses: newAddress._id } });
-            res.status(200).json("Address added successfully");
+            res.status(200).json({newAddress, message:"Address added successfully"});
         } catch (err) {
             console.log(err);
             res.status(500).json("Failed to add the address...");
