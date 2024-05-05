@@ -56,6 +56,10 @@ const Favourites = ({ navigation }) => {
     }
   };
 
+  const updateFavAfterDeletion = (favId) => {
+    setfav(prevFav => prevFav.filter(item => item._id !== favId));
+  };
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -76,13 +80,19 @@ const Favourites = ({ navigation }) => {
             <Text style={styles.heading}>Your Favourites</Text>
           </View>
           <View style={styles.listContainer}>
-            <FlatList
-              data={fav}
-              keyExtractor={(item) => item._id}
-              renderItem={({ item }) => <RenderFavItem item={item} />}
-              contentContainerStyle={styles.listContent}
-              ItemSeparatorComponent={() => <View style={styles.separator} />}
-            />
+            {fav.length === 0 ? (
+              <View style={styles.noFavContainer}>
+                <Text style={styles.noFavText}>No favorites added yet.</Text>
+              </View>
+            ) : (
+              <FlatList
+                data={fav}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => <RenderFavItem item={item} onDelete={updateFavAfterDeletion} />}
+                contentContainerStyle={styles.listContent}
+                ItemSeparatorComponent={() => <View style={styles.separator} />}
+              />
+            )}
           </View>
         </View>
       </ScrollView>
@@ -156,5 +166,16 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     color: COLORS.gray2
-  }
+  },
+  noFavContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 100,
+  },
+  noFavText: {
+    fontFamily: 'regular',
+    fontSize: SIZES.medium,
+    color: COLORS.gray,
+  },
 });

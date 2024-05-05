@@ -1,10 +1,10 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, View, ViewPropTypes } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ProductCard from './ProductCard';
-import { SIZES ,COLORS} from '../../constants/theme';
+import { SIZES, COLORS } from '../../constants/theme';
 import axios from 'axios';
 
-const Products = ({updateCartCount, updateCartIconColor}) => {
+const Products = ({ updateCartCount, updateCartIconColor }) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -24,20 +24,22 @@ const Products = ({updateCartCount, updateCartIconColor}) => {
   }, []);
 
   return (
-    <View style={{marginTop:SIZES.medium, marginHorizontal:12}}>
+    <View style={{ marginTop: SIZES.medium, marginHorizontal: 12 }}>
       {isLoading ? (
-        <ActivityIndicator size={SIZES.xxLarge} color={COLORS.primary}/>
-      ):(
-        <FlatList data={data} 
+        <ActivityIndicator size={SIZES.xxLarge} color={COLORS.primary} />
+      ) : (
+        <FlatList
+          data={data}
           keyExtractor={(item) => item._id}
-          renderItem={({item}) => <ProductCard item={item} updateCartCount={updateCartCount} updateCartIconColor={updateCartIconColor}/>}
+          renderItem={({ item }) => <ProductCard item={item} updateCartCount={updateCartCount} updateCartIconColor={updateCartIconColor} />}
           horizontal
-          contentContainerStyle={{ columnGap: SIZES.medium }}/>
+          contentContainerStyle={{ columnGap: SIZES.medium }}
+        />
       )}
     </View>
-  )
-}
+  );
+};
 
-export default Products
+export default Products;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

@@ -42,22 +42,29 @@ const ProductCard = ({ item, updateCartCount, updateCartIconColor}) => {
 
   const handleAddItemToCart = async (prodId) => {
     try {
-      const res = await axios.post(`http://192.168.29.2:3020/api/carts/addToCart/${id}`, {
-       productInCart: prodId
+      const storedId = await AsyncStorage.getItem('userId');
+      if (!storedId) {
+        navigation.navigate("Login");
+        return; 
+      }
+  
+      const res = await axios.post(`http://192.168.29.2:3020/api/carts/addToCart/${storedId}`, {
+        productInCart: prodId
       });
       console.log('Item added to cart successfully');
-      const newCartCount = await axios.get(`http://192.168.29.2:3020/api/carts/getCart/${id}`);
+      const newCartCount = await axios.get(`http://192.168.29.2:3020/api/carts/getCart/${storedId}`);
       updateCartCount(newCartCount.data.totalProductQuantity);
       updateCartIconColor('red');
-
+  
       setTimeout(() => {
         updateCartIconColor('black');
       }, 1000);
-
+  
     } catch (error) {
       console.error('Error adding item to cart:', error);
     }
   };
+  
 
   return (
     <TouchableOpacity onPress={productHandler}>

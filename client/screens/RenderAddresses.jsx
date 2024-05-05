@@ -1,12 +1,11 @@
+import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, Share } from 'react-native';
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS, SIZES } from '../constants/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useState } from 'react';
 import EditModal from './EditModal';
 import DeleteModal from './DeleteModal';
-import axios from 'axios'
-
+import axios from 'axios';
+import { COLORS, SIZES } from '../constants/theme';
 
 const RenderProductItem = ({ item, selected, onPress, onEdit, onDelete }) => {
 
@@ -30,14 +29,8 @@ const RenderProductItem = ({ item, selected, onPress, onEdit, onDelete }) => {
     };
 
     const handleDeleteConfirm = async () => {
-        try {
-            const res = await axios.delete(`http://192.168.29.2:3020/api/address/delete/${item._id}`);
-            console.log('User fetched successfully');
             setDeleteModalVisible(false);
-        } catch (error) {
-            console.error('Error fetching user:', error);
-            setIsLoading(false);
-        }
+            onDelete();
     };
 
     const handleShare = async () => {
@@ -47,21 +40,21 @@ const RenderProductItem = ({ item, selected, onPress, onEdit, onDelete }) => {
             });
             if (result.action === Share.sharedAction) {
                 if (result.activityType) {
-                    console.log('Shared successfully');
+                    console.log('Address shared successfully');
                 } else {
-                    console.log('Shared');
+                    console.log('Address shared');
                 }
             } else if (result.action === Share.dismissedAction) {
                 console.log('Share dismissed');
             }
         } catch (error) {
-            console.log(error.message);
+            console.error(error.message);
         }
     };
 
     return (
         <View style={styles.productItem}>
-            <TouchableOpacity key={item._id} onPress={onPress} style={[styles.divContainer, selected && styles.selectedAddress]}>
+            <TouchableOpacity onPress={onPress} style={[styles.divContainer, selected && styles.selectedAddress]}>
                 <View>
                     <Ionicons name="home-outline" size={24} color={COLORS.gray} />
                 </View>
@@ -105,7 +98,6 @@ const styles = StyleSheet.create({
         gap: 10,
         borderColor: COLORS.gray2,
         borderRadius: SIZES.small,
-        // marginBottom: 20,
         padding: 10
     },
     detaialsContainer: {

@@ -7,9 +7,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 
 
-const RenderFavItem = ({ item }) => {
+const RenderFavItem = ({ item, onDelete}) => {
 
     const [id, setId] = useState('');
+    const [addedToCart, setAddedToCart] = useState(false);
 
     const isFocused = useIsFocused();
     useEffect(() => {
@@ -41,6 +42,7 @@ const RenderFavItem = ({ item }) => {
             const response = await axios.delete(`http://192.168.29.2:3020/api/favourites/deleteFavItem/${favId}`);
             console.log(response.data);
             console.log("Deleted successfully");
+            onDelete(favId);
         } catch (error) {
             console.error('Error deleting quantity:', error);
         }
@@ -56,6 +58,7 @@ const RenderFavItem = ({ item }) => {
                 productInCart: prodId
             });
             console.log('Item added to cart successfully');
+            setAddedToCart(true);
         } catch (error) {
             console.error('Error adding item to cart:', error);
         }
@@ -75,7 +78,7 @@ const RenderFavItem = ({ item }) => {
                         </View>
                         <View style={styles.rowContainer1}>
                             <TouchableOpacity onPress={() => addToCart(item.productInFav._id)}>
-                                <Text style={styles.price11}>ADD TO CART</Text>
+                            <Text style={styles.price11}>{addedToCart ? 'Added to Cart' : 'ADD TO CART'}</Text>
                             </TouchableOpacity>
 
                             <View style={styles.rating}>

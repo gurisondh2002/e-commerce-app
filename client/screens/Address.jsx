@@ -210,29 +210,22 @@ export default function MapScreen({ navigation }) {
     });
   };
 
-  const handleEdit = (address) => {
-    setNewAddress(address);
-    setSelectedAddressId(address._id);
-    // openEditModal();
-  };
 
-  const handleDelete = async (addressId) => {
+  const onDeleteAddress = async (addressId) => {
     try {
-      const res = await axios.delete(`http://192.168.29.2:3020/api/addresses/${addressId}`);
-      if (res.status === 200) {
-        fetchAddresses(userId);
+        await axios.delete(`http://192.168.29.2:3020/api/address/delete/${addressId}`);
         console.log('Address deleted successfully');
-      } else {
-        console.error(`Request failed with status ${res.status}`);
-      }
+        setAddress(address.filter(item => item._id !== addressId));
     } catch (error) {
-      console.error('Error deleting address:', error);
+        console.error('Error deleting address:', error);
     }
-  };
+};
 
-  const openEditModal = () => {
-    setModalVisible(true);
-  };
+const handleEditAddress = (editedAddress) => {
+  setAddress(address.map(item => item._id === editedAddress._id ? editedAddress : item));
+};
+
+
 
   if (isLoading) {
     return (
@@ -297,8 +290,8 @@ export default function MapScreen({ navigation }) {
                       item={item}
                       selected={item._id === selectedAddressId}
                       onPress={() => setSelectedAddressId(item._id)}
-                      onEdit={() => handleEdit(item)}
-                      onDelete={() => handleDelete(item._id)}
+                      onDelete={() => onDeleteAddress(item._id)}
+                      onEdit={() => handleEditAddress(item._id)}
                     />
                   )}
                   contentContainerStyle={styles.listContent}

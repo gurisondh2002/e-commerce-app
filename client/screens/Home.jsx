@@ -95,9 +95,19 @@ const Home = () => {
     }
   };
 
-  const handleCartClick = () => {
-    navigation.navigate("Cart")
-  }
+  const handleCartClick = async () => {
+    try {
+      const storedId = await AsyncStorage.getItem('userId');
+      if (!storedId) {
+        navigation.navigate("Login"); 
+      } else {
+        navigation.navigate("Cart"); 
+      }
+    } catch (error) {
+      console.error('Error fetching stored user data:', error);
+    }
+  };
+  
 
   const updateCartCount = useCallback((newCount) => {
     setCartCount(newCount);

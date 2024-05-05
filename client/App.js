@@ -1,8 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
+import React, { useCallback } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useFonts } from 'expo-font';
-import * as SplashScreen from 'expo-splash-screen'
-import { useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from './navigation/BottomTabNavigation';
@@ -18,13 +15,14 @@ import updateProfile from './screens/updateProfile';
 import Address from './screens/Address'
 import OrderComplete from './screens/OrderComplete';
 import OrderPage from './screens/OrderPage'
-
+import FirstSplashScreen from './screens/FirstScreen';
+import SecondSplashScreen from './screens/SecondScreen';
+import ThirdSplashScreen from './screens/ThirdScreen';
+import { useFonts } from 'expo-font';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
-
-
   const [fontsLoaded] = useFonts({
     regular : require("./assets/fonts/Poppins-Regular.ttf"),
     light: require("./assets/fonts/Poppins-Light.ttf"),
@@ -47,22 +45,25 @@ export default function App() {
 
   return (
     <UserProvider>
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Bottom Navigator" component={BottomTabNavigation} options={{ headerShown:false}}/>
-        <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown:false}}/>
-        <Stack.Screen name="ProductList" component={NewRivals} options={{ headerShown:false}}/>
-        <Stack.Screen name="Login" component={LoginPage} options={{ headerShown:false}}/>
-        <Stack.Screen name="SignUp" component={RegisterPage} options={{ headerShown:false}}/>  
-        <Stack.Screen name="Favourites" component={Favourites} options={{ headerShown:false}}/>
-        <Stack.Screen name="Orders" component={Orders} options={{ headerShown:false}}/>
-        <Stack.Screen name="Cart" component={Cart} options={{ headerShown:false}}/>      
-        <Stack.Screen name="UpdateUser" component={updateProfile} options={{ headerShown:false}}/>
-        <Stack.Screen name="OrderComplete" component={OrderComplete} options={{ headerShown:false}}/>
-        <Stack.Screen name="Address" component={Address} options={{ headerShown:false}}/>
-        <Stack.Screen name="OrderPage" component={OrderPage} options={{ headerShown:false}}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="FirstSplashScreen" component={FirstSplashScreen} options={{ headerShown:false, animation:'fade' }} />
+          <Stack.Screen name="SecondSplashScreen" component={SecondSplashScreen} options={{ headerShown:false, animation:'fade' }} />
+          <Stack.Screen name="ThirdSplashScreen" component={ThirdSplashScreen} options={{ headerShown:false, animation:'fade' }} />
+          <Stack.Screen name="Bottom Navigator" component={BottomTabNavigation} options={{ headerShown:false}}/>
+          <Stack.Screen name="ProductDetails" component={ProductDetails} options={{ headerShown:false}}/>
+          <Stack.Screen name="ProductList" component={NewRivals} options={{ headerShown:false}}/>
+          <Stack.Screen name="Login" component={LoginPage} options={{ headerShown:false}}/>
+          <Stack.Screen name="SignUp" component={RegisterPage} options={{ headerShown:false}}/>  
+          <Stack.Screen name="Favourites" component={Favourites} options={{ headerShown:false}}/>
+          <Stack.Screen name="Orders" component={Orders} options={{ headerShown:false}}/>
+          <Stack.Screen name="Cart" component={Cart} options={{ headerShown:false}}/>      
+          <Stack.Screen name="UpdateUser" component={updateProfile} options={{ headerShown:false}}/>
+          <Stack.Screen name="OrderComplete" component={OrderComplete} options={{ headerShown:false}}/>
+          <Stack.Screen name="Address" component={Address} options={{ headerShown:false}}/>
+          <Stack.Screen name="OrderPage" component={OrderPage} options={{ headerShown:false}}/>
+        </Stack.Navigator>
+      </NavigationContainer>
     </UserProvider>
   );
 }
