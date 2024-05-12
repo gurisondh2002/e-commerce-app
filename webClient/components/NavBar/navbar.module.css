@@ -1,0 +1,21 @@
+.logo{
+    margin-right: 50px !important;
+    margin-left: 0 !important;
+    width:30px !important;
+    height:30px !important;
+}
+
+.navBarContainer{
+    z-index: 1000;
+}
+
+.navLink {
+    font-weight: "semibold";
+    color: black;
+    margin-bottom: 2px;
+  }
+  
+  .navLink:hover {
+    background-color: #BFEFFF; 
+    border-radius: 10px;
+  }

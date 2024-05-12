@@ -1,0 +1,50 @@
+.mainContainer{
+    /* display: flex; */
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+.orderContainer{
+    padding: 20px;
+}
+.orderHeading{
+    margin-bottom: 20px;
+}
+.orderTable table{
+    border-collapse: collapse;
+  width: 100%;
+}
+.orderTable th{
+    text-align: left;
+  padding: 8px;
+}
+.orderTable td{
+    text-align: left;
+  padding: 8px;
+}
+.orderTable tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+.orderTotal{
+    margin-top: 10px;
+    padding: 2px;
+    border: 1px solid black;
+}
+.orderNow{
+    width: 100%;
+    margin: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.orderNow button{
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: rgba(204, 109, 102, 0.6);
+}
+
+.orderNow button:hover{
+    box-shadow: 7px 7px 7px grey;
+    color:white;
+    background-color:  rgb(204, 102, 102);
+}

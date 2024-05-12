@@ -1,0 +1,48 @@
+.contactContainer{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.leftContainer{
+    width: 50%;
+    min-height:720px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(255,245,238);
+}
+.rightContainer{
+    width: 50%;
+    min-height:720px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.contactPhone{
+    display: flex;
+    margin: 20px;
+}
+.contactEmail{
+    display: flex;
+    margin: 20px;
+    flex-wrap: wrap;
+    max-width: 100%;
+}
+
+.emailContainer{
+    max-width: 100%;
+}
+
+@media screen and (max-width:768px) {
+    .contactContainer{
+        flex-direction: column-reverse;
+    }
+    .rightContainer, .leftContainer{
+        width: 100%;
+    }
+}
