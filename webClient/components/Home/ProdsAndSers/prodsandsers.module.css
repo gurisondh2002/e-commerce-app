@@ -7,7 +7,6 @@
     height: auto;
     padding-top: 30px;
     padding-bottom: 30px;
-    background-color: #D9F4FF;
 }
 
 .productsContainer {
@@ -18,6 +17,17 @@
     width: 100%;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.selectClass{
+    background-color: "white";
+    color: gray;
+}
+
+.selectClass:hover{
+    background-color: #004743;
+    color: white;
+    font-weight: bold;
 }
 
 .text {
