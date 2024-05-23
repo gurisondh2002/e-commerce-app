@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Carousel } from 'react-bootstrap';
+import { Carousel } from 'react-bootstrap';
 import Image from 'next/image';
 
 const FashionCarousel = () => {
@@ -36,21 +36,39 @@ const FashionCarousel = () => {
             height={600}
             objectFit="cover"
           />
-          <Carousel.Caption style={{
+          <Carousel.Caption className="d-flex flex-column align-items-center align-items-md-start" style={{
             position: 'absolute',
             bottom: '12.25rem',
-            left: '-35%',
+            left: '0',
+            left: 'auto',
             paddingTop: '1.25rem',
             paddingBottom: '1.25rem',
             textAlign: 'center',
-            // background: 'rgba(0, 0, 0, 0.5)',
             borderRadius: '10px',
             gap: '10px',
-            padding: '0 20px'
+            padding: '0 20px',
           }}>
-            <h1 style={{ fontWeight: 'bold', fontSize: '60px', margin: 0, backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>STYLIST PICKS</h1>
-            <h1 style={{ fontWeight: 'bold', fontSize: '60px', margin: 0, backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>BEAT THE HEAT</h1>
-            <button size="sm" style={{ fontWeight: 'bold', fontSize: '25px', marginTop: "20px", backgroundColor: "transparent", color: "white", border: "2px solid white", padding: "6px" }}>
+            <h1 className="display-4 display-md-1 font-weight-bold" style={{
+              margin: 0, 
+              backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", 
+              WebkitBackgroundClip: "text", 
+              WebkitTextFillColor: "transparent",
+            }}>
+              STYLIST PICKS
+            </h1>
+            <h1 className="display-4 display-md-1 font-weight-bold" style={{
+              margin: 0, 
+              backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", 
+              WebkitBackgroundClip: "text", 
+              WebkitTextFillColor: "transparent",
+            }}>
+              BEAT THE HEAT
+            </h1>
+            <button className="btn btn-outline-light mt-3" style={{
+              fontWeight: 'bold', 
+              fontSize: '1.5rem',
+              padding: '6px 12px',
+            }}>
               SHOP NOW
             </button>
           </Carousel.Caption>

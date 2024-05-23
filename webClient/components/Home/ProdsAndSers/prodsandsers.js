@@ -1,4 +1,3 @@
-
 'use client'
 import React, { useEffect, useState } from 'react'
 import styles from './prodsandsers.module.css'
@@ -11,6 +10,7 @@ const Card = dynamic(
 
 async function ProdsAndSers() {
     const [cardData, setCarddata] = useState([]);
+    const [activeButton, setActiveButton] = useState('all');
 
     useEffect(() => {
         fetchData();
@@ -53,6 +53,7 @@ async function ProdsAndSers() {
     };
 
     const handleButtonClick = async (category) => {
+        setActiveButton(category);
         switch (category) {
             case 'all':
                 await fetchData();
@@ -81,11 +82,11 @@ async function ProdsAndSers() {
                     <div className={`${styles.textContent}`}>
                         <p>Check out most promising products</p>
                     </div>
-                    <div style={{ display: "flex", flexDirection: "row", gap: "10px", marginBottom: "10px" }}>
-                        <button onClick={() => handleButtonClick('all')} style={{width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: "gray"}} className={`${styles.selectClass}`}>All</button>
-                        <button onClick={() => handleButtonClick('women')} style={{width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: "gray" }} className={`${styles.selectClass}`}>Women</button>
-                        <button onClick={() => handleButtonClick('men')} style={{width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: "gray" }} className={`${styles.selectClass}`}>Mens</button>
-                        <button onClick={() => handleButtonClick('kids')} style={{width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: "gray" }} className={`${styles.selectClass}`}>Kids</button>
+                    <div style={{ display: "flex", flexDirection: "row", gap: "10px", marginBottom: "10px", flexWrap: "wrap" }}>
+                        <button onClick={() => handleButtonClick('all')} style={{ width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: activeButton === 'all' ? 'white' : 'gray', backgroundColor: activeButton === 'all' ? '#6CDDFF' : 'transparent' }} className={`${styles.selectClass}`}>All</button>
+                        <button onClick={() => handleButtonClick('women')} style={{ width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: activeButton === 'women' ? 'white' : 'gray', backgroundColor: activeButton === 'women' ? '#6CDDFF' : 'transparent' }} className={`${styles.selectClass}`}>Women</button>
+                        <button onClick={() => handleButtonClick('men')} style={{ width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: activeButton === 'men' ? 'white' : 'gray', backgroundColor: activeButton === 'men' ? '#6CDDFF' : 'transparent' }} className={`${styles.selectClass}`}>Mens</button>
+                        <button onClick={() => handleButtonClick('kids')} style={{ width: "100px", marginTop: "10px", border: "1px solid gray", borderRadius: "30px", padding: "5px", color: activeButton === 'kids' ? 'white' : 'gray', backgroundColor: activeButton === 'kids' ? '#6CDDFF' : 'transparent' }} className={`${styles.selectClass}`}>Kids</button>
                     </div>
                 </div>
                 <div className={`${styles.flex}`}>
