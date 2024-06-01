@@ -22,6 +22,39 @@ module.exports = {
             res.status(500).json("Failed to get all the product...");
         }
     },
+
+    getAllProductMens: async (req, res) => {
+        console.log("hello")
+        try {
+            const products = await Product.find({ category: "Mens" }).sort({ createdAt: -1 });
+            res.status(200).json(products);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json("Failed to get all the product...");
+        }
+    },
+
+    getAllProductWomen: async (req, res) => {
+        console.log("hello")
+        try {
+            const products = await Product.find({ category: "Women" }).sort({ createdAt: -1 });
+            res.status(200).json(products);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json("Failed to get all the product...");
+        }
+    },
+
+    getAllProductKids: async (req, res) => {
+        console.log("hello")
+        try {
+            const products = await Product.find({ category: "Kids" }).sort({ createdAt: -1 });
+            res.status(200).json(products);
+        } catch (err) {
+            console.log(err);
+            res.status(500).json("Failed to get all the product...");
+        }
+    },
     getProduct: async (req, res) => {
         try {
             const product = await Product.findById(req.params.id);
@@ -54,5 +87,22 @@ module.exports = {
             console.log(err);
             res.status(500).json("Failed to get the products...");
         }
+    },
+    getCatSubcat: async (req, res) => {
+        const { subCategory } = req.params;
+
+        try {
+            const products = await Product.find({ subCategory });
+
+            if (products.length === 0) {
+                return res.status(404).json({ message: 'No products found for the specified category and subcategory.' });
+            }
+
+            res.json(products);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal server error.' });
+        }
+
     }
 };

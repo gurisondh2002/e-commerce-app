@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const subCategories = ['Clothing', 'Bags', 'Watches', 'Shoes', 'Accessories', 'Skin Care'];
+
 const ProductSchema = new mongoose.Schema({
     title :{
         type:String,
@@ -15,7 +17,28 @@ const ProductSchema = new mongoose.Schema({
     },
     imageUrl :{
         type:String,
-        required:true,
+        required:false,
+    },
+    discountPrice:{
+        type:String,
+        required:true, 
+    },
+    discount:{
+        type: Number,
+        required: false,
+    },
+    category: {
+        type: String,
+        enum: ['Mens', 'Women', 'Kids']
+    },
+    subCategory: {
+        type: String,
+        enum: subCategories,
+        required: true,
+    },
+    size: {
+        type: String,
+        enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
     },
     description :{
         type:String,

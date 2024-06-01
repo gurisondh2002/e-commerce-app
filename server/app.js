@@ -2,7 +2,7 @@ const express = require("express")
 const app = express();
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
-// const cors = require('cors')
+const cors = require('cors')
 const productRouter = require("./routes/ProductRoute");
 const authRouter = require("./routes/auth")
 const userRouter = require("./routes/user")
@@ -13,7 +13,7 @@ const addressRouter = require("./routes/address")
 const port = 3020;
 
 
-// app.use(cors())
+app.use(cors())
 
 dotenv.config();
 mongoose.connect(process.env.MONGODB_URL).then(() =>{
