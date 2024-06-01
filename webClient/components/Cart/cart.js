@@ -15,7 +15,7 @@ function Cart() {
     const [shipping, setShipping] = useState(0);
     const [grandTotal, setGrandTotal] = useState(0);
 
-    const email = localStorage.getItem('email')
+    // const email = localStorage.getItem('email')
 
     useEffect(() => {
         if (userId) {
@@ -54,7 +54,7 @@ function Cart() {
 
     const handlePayment = async()=>{
 
-        if(email){
+        // if(email){
             
             const stripePromise = await loadStripe("pk_test_51PMogU04h1WM8e3aPm7SJ9uQyCNwsTmToQm5GNG9muPyJpHqFwRYEmfhqdSoQglmCFPqpCqLDBnVFB4ReR4FwbkR00vNl053U8")
             const res = await fetch(`https://e-comm-backend-fi70.onrender.com/api/orders/payment`,{
@@ -71,13 +71,13 @@ function Cart() {
   
             toast("Redirect to payment Gateway...!")
             stripePromise.redirectToCheckout({sessionId : data}) 
-        }
-        else{
-          toast("You have not Login!")
-          setTimeout(()=>{
-            navigate("/login")
-          },1000)
-        }
+        // }
+        // else{
+        //   toast("You have not Login!")
+        //   setTimeout(()=>{
+        //     navigate("/login")
+        //   },1000)
+        // }
       
     }
 
