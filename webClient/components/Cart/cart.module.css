@@ -17,6 +17,55 @@
     padding-top:10px;
     padding-bottom: 10px;
 }
+.cartTable {
+    width: 90%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding-left: 20px;
+    border-radius: 10px;
+    font-family: 'Montserrat';
+    /* background-color: red; */
+  }
+  
+  .thGrayBg {
+    background-color: #899DA5;
+    
+    font-weight: 500;
+    color: #FFFFFF;
+    padding: 10px;
+    margin-left: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .cartTable th,.cartTable td {
+    padding: 25px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .cartTable td {
+    vertical-align: top;
+  }
+  
+  .product {
+    display: flex;
+    align-items: center;
+  }
+  
+  .product img {
+    margin-right: 30px;
+  }
+  
+  @media (max-width: 768px) {
+   .cartTable {
+      font-size: 14px;
+    }
+   .cartTable th,.cartTable td {
+      padding: 5px;
+    }
+  }
 .text{
     display: flex;
     flex-direction: column;
@@ -26,6 +75,7 @@
 }
 .textHeading h1{
     color: black;
+    font-family: 'Montserrat';
 }
 .flex{
     display: flex;

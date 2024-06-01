@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './products.module.css'
 import dynamic from 'next/dynamic'
 import axios from 'axios'
+import { useParams } from 'next/navigation'
 const Card = dynamic(
     ()=>import('@/components/Products/Card/card'),
     {suspense:true}
@@ -12,15 +13,21 @@ const Card = dynamic(
 
 async function Products() {
 
+    const params = useParams();
+    let subcategory;
+    if (params) {
+        subcategory = params.subcategory;
+    }
+
     const [cardData, setCarddata] = useState([]);
 
     useEffect(() => {
         fetchData();
-      }, []);
+      }, [subcategory]);
     
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:3020/api/products/getllProducts/Mens');
+          const response = await axios.get(`http://localhost:3020/api/products/getllProducts/${subcategory}`);
           setCarddata(response.data);
         } catch (error) {
           console.error(error, "err");
@@ -50,8 +57,6 @@ async function Products() {
                        heading={data.title}
                        content={data.supplier}
                        amount={data.price}
-                       disPrice={data.discountPrice}
-                       discount={data.discount}
                        _id={data._id}
                    />
                     ))}

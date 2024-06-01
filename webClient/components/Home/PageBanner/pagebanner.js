@@ -47,12 +47,14 @@ const FashionCarousel = () => {
             borderRadius: '10px',
             gap: '10px',
             padding: '0 20px',
+            fontWeight:"bold"
           }}>
             <h1 className="display-4 display-md-1 font-weight-bold" style={{
               margin: 0, 
               backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", 
               WebkitBackgroundClip: "text", 
               WebkitTextFillColor: "transparent",
+              fontWeight:"bold"
             }}>
               STYLIST PICKS
             </h1>
@@ -61,6 +63,7 @@ const FashionCarousel = () => {
               backgroundImage: "linear-gradient(to bottom, #9FD8FF, #FFFFFF)", 
               WebkitBackgroundClip: "text", 
               WebkitTextFillColor: "transparent",
+              fontWeight:"bold"
             }}>
               BEAT THE HEAT
             </h1>
