@@ -33,7 +33,7 @@ function Services() {
 
     const fetchWomen = async () => {
         try {
-            const response = await axios.get('http://localhost:3020/api/products/getllProducts/women');
+            const response = await axios.get('https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/women');
             setCarddata(response.data);
         } catch (error) {
             console.error(error, "err");
@@ -42,7 +42,7 @@ function Services() {
 
     const fetchMen = async () => {
         try {
-            const response = await axios.get('http://localhost:3020/api/products/getllProducts/men');
+            const response = await axios.get('https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/men');
             setCarddata(response.data);
         } catch (error) {
             console.error(error, "err");
@@ -51,7 +51,7 @@ function Services() {
 
     const fetchKids = async () => {
         try {
-            const response = await axios.get('http://localhost:3020/api/products/getllProducts/kids');
+            const response = await axios.get('https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/kids');
             setCarddata(response.data);
         } catch (error) {
             console.error(error, "err");

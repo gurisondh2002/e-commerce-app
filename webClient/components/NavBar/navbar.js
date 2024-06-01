@@ -19,7 +19,7 @@ function Navigationbar() {
   const fetchCartCount = async () => {
     try {
       const storedId = localStorage.getItem('userId');
-      const response = await axios.get(`http://localhost:3020/api/carts/getCart/${storedId}`);
+      const response = await axios.get(`https://e-comm-backend-fi70.onrender.com/api/carts/getCart/${storedId}`);
       setCartCount(response.data.totalProductQuantity);
     } catch (error) {
       console.error('Error fetching cart count:', error);

@@ -31,7 +31,7 @@ function Login() {
                 email: data.email,
                 password: data.password
             }
-            const response = await axios.post('http://localhost:3020/api/login', userDataa);
+            const response = await axios.post('https://e-comm-backend-fi70.onrender.com/api/login', userDataa);
             console.log("res", response.data)
             localStorage.setItem('email', response.data.email);
             localStorage.setItem('userId', response.data._id);

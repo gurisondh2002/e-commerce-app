@@ -6,7 +6,7 @@ import { useBootstrapBreakpoints } from 'react-bootstrap/esm/ThemeProvider'
 
 
 async function sendRegistrationData(data) {
-    const res = await fetch('http://localhost:3001/user/register', { 
+    const res = await fetch('https://e-comm-backend-fi70.onrender.com/user/register', { 
         cache: 'no-cache' ,
         method: "POST",
         body: JSON.stringify(data),

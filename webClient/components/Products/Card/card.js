@@ -10,7 +10,7 @@ function Card(props) {
         try {
             const storedId = localStorage.getItem('userId');
 
-            const res = await axios.post(`http://localhost:3020/api/carts/addToCart/${storedId}`, {
+            const res = await axios.post(`https://e-comm-backend-fi70.onrender.com/api/carts/addToCart/${storedId}`, {
                 productInCart: prodId
             });
             console.log('Item added to cart successfully');

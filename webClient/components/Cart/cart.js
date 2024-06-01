@@ -25,7 +25,7 @@ function Cart() {
 
     const fetchCart = async () => {
         try {
-            const res = await axios.get(`http://localhost:3020/api/carts/find/${userId}`);
+            const res = await axios.get(`https://e-comm-backend-fi70.onrender.com/api/carts/find/${userId}`);
             if (res.status === 200) {
                 console.log("Cart data fetched:", res.data.cart.products);
                 setCartData(res.data.cart.products);
@@ -57,7 +57,7 @@ function Cart() {
         if(email){
             
             const stripePromise = await loadStripe("pk_test_51PMogU04h1WM8e3aPm7SJ9uQyCNwsTmToQm5GNG9muPyJpHqFwRYEmfhqdSoQglmCFPqpCqLDBnVFB4ReR4FwbkR00vNl053U8")
-            const res = await fetch(`http://localhost:3020/api/orders/payment`,{
+            const res = await fetch(`https://e-comm-backend-fi70.onrender.com/api/orders/payment`,{
               method : "POST",
               headers  : {
                 "content-type" : "application/json"

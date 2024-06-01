@@ -20,7 +20,7 @@ function Card(props) {
 
     const fetchCart = async () => {
         try {
-            const res = await axios.get(`http://localhost:3020/api/carts/find/${userId}`);
+            const res = await axios.get(`https://e-comm-backend-fi70.onrender.com/api/carts/find/${userId}`);
             if (res.status === 200) {
                 console.log("Cart data fetched:", res.data.cart.products);
                 setCartData(res.data.cart.products);
@@ -34,7 +34,7 @@ function Card(props) {
 
     const handleIncrement = async (productId, price) => {
         try {
-            const response = await axios.post(`http://localhost:3020/api/carts/incCartItemQuantity/${userId}`, { productInCart: productId });
+            const response = await axios.post(`https://e-comm-backend-fi70.onrender.com/api/carts/incCartItemQuantity/${userId}`, { productInCart: productId });
             console.log(response.data);
             fetchCart(userId);
             console.log("Increment successfully");
@@ -45,7 +45,7 @@ function Card(props) {
 
     const handleDecrement = async (productId, price) => {
         try {
-            const response = await axios.post(`http://localhost:3020/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
+            const response = await axios.post(`https://e-comm-backend-fi70.onrender.com/api/carts/decCartItemQuantity/${userId}`, { productInCart: productId });
             console.log(response.data);
             fetchCart(userId);
             console.log("Decrement successfully");
@@ -56,7 +56,7 @@ function Card(props) {
 
     const handleDelete = async (cartId) => {
         try {
-          const response = await axios.delete(`http://localhost:3020/api/carts/deleteCartItem/${cartId}`);
+          const response = await axios.delete(`https://e-comm-backend-fi70.onrender.com/api/carts/deleteCartItem/${cartId}`);
           console.log(response.data);
           fetchCart(userId);
           console.log("Deleted successfully");

@@ -29,7 +29,7 @@ function ProdsAndSers() {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('http://localhost:3020/api/products/getllProducts');
+            const response = await axios.get('https://e-comm-backend-fi70.onrender.com/api/products/getllProducts');
             setCardData(response.data);
         } catch (error) {
             console.error(error, "err");
@@ -38,7 +38,7 @@ function ProdsAndSers() {
 
     const fetchCategoryData = async (category) => {
         try {
-            const response = await axios.get(`http://localhost:3020/api/products/getllProducts/${category}`);
+            const response = await axios.get(`https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/${category}`);
             setCardData(response.data);
         } catch (error) {
             console.error(error, "err");
@@ -57,7 +57,7 @@ function ProdsAndSers() {
 
     const handleSubCategoryClick = async (subCategory) => {
         try {
-            const response = await axios.get(`http://localhost:3020/api/products/getllProducts/${subCategory}`);
+            const response = await axios.get(`https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/${subCategory}`);
             // setCardData(response.data);
         } catch (error) {
             console.error(error, "err");

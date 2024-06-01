@@ -20,7 +20,7 @@ async function Products() {
     
       const fetchData = async () => {
         try {
-          const response = await axios.get('http://localhost:3020/api/products/getllProducts/women');
+          const response = await axios.get('https://e-comm-backend-fi70.onrender.com/api/products/getllProducts/women');
           setCarddata(response.data);
         } catch (error) {
           console.error(error, "err");
